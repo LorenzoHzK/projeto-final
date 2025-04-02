@@ -6,12 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        //
+        Schema::create('order_items', function (Blueprint $table) {
+            $table->integer('id');
+
+            $table->UnsignedInteger('order_id')->unique();
+            $table->foreign('order_id')->references('id')->on('orders');
+
+            $table->UnsignedInteger('product_id')->unique();
+            $table->foreign('product_id')->references('id')->on('products');
+
+            $table->integer('quantity');
+    });
     }
 
     /**

@@ -11,16 +11,19 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->string('address_id');
+            $table->unsignedBigInteger('address_id');
             $table->foreign('address_id')->references('id')->on('address')->onDelete('cascade');
 
             $table->datetime('orderDate');
-            $table->foreign('cupon_id')->references('id')->on('cupons')->nullable()->onDelete('cascade');
+
+            $table->unsignedBigInteger('cupon_id');
+            $table->foreign('cupon_id')->references('id')->on('coupons')->nullable()->onDelete('cascade');
+
             $table->string('status')->enum('Pending', 'Processing', 'Shipped', 'Completed', 'Canceled');
-            $table->decimal(totalAmount, 10,2);
+            $table->decimal('totalAmount', 10,2);
 
             $table->timestamps();
         });

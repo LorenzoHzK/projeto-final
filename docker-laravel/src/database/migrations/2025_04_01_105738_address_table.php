@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('address', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->string('street');

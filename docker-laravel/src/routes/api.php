@@ -3,8 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
-use App\Models\address;
-use App\Models\orders;
+use App\Http\AddressController;
+use App\Http\OrdersController;
+
+Route::resource('/address', AddressController::class);
+Route::resource('/orders', OrdersController::class);
 
 
 Route::post("/register", function(Request $request){

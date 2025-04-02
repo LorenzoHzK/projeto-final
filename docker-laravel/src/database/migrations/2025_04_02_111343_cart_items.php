@@ -9,21 +9,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cart_items', function (Blueprint $table) {
-            $table->integer('id');
+            $table->id();
 
-            $table->UnsignedInteger('cart_id')->unique();
+            $table->unsignedBigInteger('cart_id');
             $table->foreign('cart_id')->references('id')->on('carts');
 
-            $table->UnsignedInteger('product_id')->unique();
+            $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
 
             $table->integer('quantity');
-    });
+
+            $table->timestamps();
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         //

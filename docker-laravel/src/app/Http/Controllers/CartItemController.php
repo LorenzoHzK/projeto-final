@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class CartItem extends Controller
+class CartItemController extends Controller
 {
     public function index()
     {
@@ -19,8 +19,10 @@ class CartItem extends Controller
     {
         Schema::create('cart_items', function (Blueprint $table) {
             $table->integer('id');
-            $table->UnsignedInteger('cart_id')->unique();
+
+            $table->unsignedBigInteger('cart_id')->unique();
             $table->foreign('cart_id')->references('id')->on('carts');
+
             $table->UnsignedInteger('product_id')->unique();
             $table->foreign('product_id')->references('id')->on('products');
             $table->integer('quantity');

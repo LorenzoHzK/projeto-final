@@ -9,12 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('order_items', function (Blueprint $table) {
-            $table->integer('id');
+            $table->id();
 
-            $table->UnsignedInteger('order_id')->unique();
+            $table->UnsignedBigInteger('order_id');
             $table->foreign('order_id')->references('id')->on('orders');
 
-            $table->UnsignedInteger('product_id')->unique();
+            $table->UnsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
 
             $table->integer('quantity');

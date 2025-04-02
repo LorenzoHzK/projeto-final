@@ -6,23 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
     public function up(): void
     {
-        Schema::create('coupons', function (Blueprint $table) {
+        Schema::create ('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code');
-            $table->date('startDate');
-            $table->date('endDate');
-            $table->decimal('discount', 10,2);
-
-            $table->timestamps();
+            $table->string('name');
+            $table->string('description');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         //

@@ -2,66 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\UserService;
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function index()
     {
-        $users = User::all();
-        return response()->json($users);
+        return $this->userService->getAllUsers();
     }
 
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        return $this->userService->getUserById($id);
     }
 
-    public function update(Request $request, string $id)
+    public function register (Request $request)
     {
-        //
+        return $this->userService->registerUser($request);
     }
 
-    public function register(Request $request)
+    public function login (Request $request)
     {
-            $request->validate([
-            "email" => "required|string|email|unique:users",
-            "name" => "required|string|min:3",
-            "password" => "required|string|min:8"
-        ]);
-
-        $user = User::create([
-            "email" => $request->email,
-            "name" => $request->name,
-            "password" => Hash::make($request->password)
-        ]);
-
-        return response()->json([
-            "message" => "User created successfully",
-            "user" => $user
-        ]);
+        return $this->userService->loginUser($request);
     }
 
-    public function login(Request $request)
+    public function renewToken(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        return $this->userService->renewToken($request);
+    }
 
-        if (Auth :: attempt($credentials)) {
-            $user = $request->user();
-
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            return response()->json([
-                "access_token" => $token,
-                "token_type" => "Bearer"
-            ]);
-        }
-
-        return response()->json([
-            "message" => "Invalid email or password"
-        ]);
+    public function verifyToken(Request $request)
+    {
+        return $this->userService->verifyToken($request);
     }
 }

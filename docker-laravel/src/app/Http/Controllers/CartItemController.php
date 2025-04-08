@@ -12,9 +12,6 @@ class CartItemController extends Controller
         return response()->json($cartItem);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         Schema::create('cart_items', function (Blueprint $table) {

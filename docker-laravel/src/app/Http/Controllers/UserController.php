@@ -14,16 +14,6 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
-    public function index()
-    {
-        return $this->userService->getAllUsers();
-    }
-
-    public function show($id)
-    {
-        return $this->userService->getUserById($id);
-    }
-
     public function register (Request $request)
     {
         return $this->userService->registerUser($request);
@@ -34,6 +24,11 @@ class UserController extends Controller
         return $this->userService->loginUser($request);
     }
 
+    public function logout (Request $request)
+    {
+        return $this->userService->logout($request);
+    }
+
     public function renewToken(Request $request)
     {
         return $this->userService->renewToken($request);
@@ -42,5 +37,25 @@ class UserController extends Controller
     public function verifyToken(Request $request)
     {
         return $this->userService->verifyToken($request);
+    }
+
+    public function info_user()
+    {
+        return $this->userService->info_user();
+    }
+
+    public function update_user(Request $request)
+    {
+        return $this->userService->update_user($request);
+    }
+
+    public function delete_user()
+    {
+        return $this->userService->delete_user();
+    }
+
+    public function create_moderator(Request $request)
+    {
+        return $this->userService->create_moderator($request);
     }
 }

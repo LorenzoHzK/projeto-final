@@ -36,6 +36,11 @@ class UserRepository
         return $user->fresh();
     }
 
+    public function create(array $data): User
+    {
+        return $this->model->create($data);
+    }
+
     public function delete(int $id): bool
     {
         $user = $this->find($id);

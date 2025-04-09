@@ -5,56 +5,20 @@ use App\Repositories\UserRepository;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 class UserService
 {
     public function __construct(protected UserRepository $userRepository)
     {
     }
-    public function updateUser(Request $request, $id)
-    {
-        $validator = Validator::make($request->all(), [
-            "name" => "sometimes|string|min:3",
-            "email" => "sometimes|string|email|unique:users,email,$id",
-            "password" => "sometimes|string|min:8"
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        $data = $request->only(['name', 'email']);
-
-        if ($request->has('password')) {
-            $data['password'] = Hash::make($request->password);
-        }
-
-        return $this->userRepository->update($id, $data);
-
-        return response()->json([
-            "message" => "User not found"
-        ]);
-
-        return $this->UserRepository->update($user);
-    }
 
     /* registro do usuario */
     public function registerUser(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $userData = $request ->validate([
             "email" => "required|email|unique:users,email",
             "name" => "required|string|min:3",
             "password" => "required|string|min:8"
         ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'erro, This account already exists'
-                ], 401);
-        };
 
         $userData = [
             "email" => $request->email,
@@ -82,6 +46,16 @@ class UserService
             "message" => "Login successful",
             "access_token" => $token,
             "token_type" => "Bearer",
+        ]);
+    }
+
+
+    // LogOut do User
+    public function logout(){
+        auth()->user()->tokens()->delete();
+
+        return response()->json([
+            "message" => "Logout successful"
         ]);
     }
 
@@ -117,6 +91,62 @@ class UserService
         return response()->json([
             "message" => "Token verified successfully",
             "date_expires_token" => $user->tokens()->first()->expires_at,
+        ]);
+    }
+
+    public function info_user()
+    {
+        return response()->json(auth()->user());
+    }
+
+    public function update_user(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'sometimes|string|min:3',
+            'email' => 'sometimes|string|min:3|email|unique:users,email',
+            'password' => 'required|string|min:8'
+        ]);
+
+        $user = auth()->user();
+        $user->update($validated);
+        return response()->json("Successful Updated, Your profile $user->name ");
+    }
+
+    public function delete_user()
+    {
+        $user = auth()->user();
+        $user->delete();
+        $user->tokens()->delete();
+        return response()->json(["message"=> "User deleted successfully"]);
+    }
+
+    public function create_moderator(Request $request)
+    {
+        $user = auth()->user();
+
+        $validated = $request ->validate([
+            "name" => "required|string|min:3",
+            "email" => "required|email|unique:users,email",
+            "password" => "required|string|min:8"
+        ]);
+
+        if ($user->role != 'Admin') {
+            return response()->json([
+                'message' => 'erro, you can`t create a moderator, to create a moderator you must be an admin'
+            ], 401);
+        };
+
+        $userData = [
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => $request ->password,
+            "role" => "Moderator"
+        ];
+
+        $this->userRepository->create($userData);
+
+        return response()->json([
+            'message' => "Successful create moderator"
         ]);
     }
 }

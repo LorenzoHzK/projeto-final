@@ -6,12 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
     public function up(): void
     {
-        Schema::create('coupons', function (Blueprint $table) {
+        Schema::create('discount', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code');
+            $table->string('description');
             $table->date('startDate');
             $table->date('endDate');
             $table->decimal('discount', 10,2);
@@ -20,11 +19,8 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('discount');
     }
 };

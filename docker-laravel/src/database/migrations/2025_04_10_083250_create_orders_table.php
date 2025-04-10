@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->unsignedBigInteger('address_id');
-            $table->foreign('address_id')->references('id')->on('address')->onDelete('cascade');
+            $table->foreign('address_id')->references('id')->on('addresses')->onDelete('cascade');
 
             $table->datetime('orderDate');
 
@@ -31,6 +31,9 @@ return new class extends Migration
 
     public function down(): void
     {
-        //
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropForeign('orders_user_id_foreign'); // Nome exato da constraint
+        });
+        Schema::dropIfExists('orders');
     }
 };

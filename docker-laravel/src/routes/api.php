@@ -1,8 +1,7 @@
 <?php
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\User;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AddressController;
 
 // AUTENTICACAO - Rotas para o login e registro do usuário -
 Route::post('/register', [UserController::class, 'register']);
@@ -16,3 +15,7 @@ Route::middleware('auth:sanctum')->get('/user/me', [UserController::class, 'info
 Route::middleware('auth:sanctum')->put('/user/me', [UserController::class, 'update_user']);
 Route::middleware('auth:sanctum')->delete('/user/me', [UserController::class, 'delete_user']);
 Route::middleware('auth:sanctum')->post('/user/create/moderator', [UserController::class, 'create_moderator']);
+
+
+// Rotas para o address
+Route::middleware('auth:sanctum')->resource('/address',AddressController::class);

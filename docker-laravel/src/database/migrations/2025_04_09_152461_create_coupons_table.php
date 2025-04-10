@@ -8,9 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('discount', function (Blueprint $table) {
+        Schema::create('coupons', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('description');
+            $table->string('code');
             $table->date('startDate');
             $table->date('endDate');
             $table->decimal('discount', 10,2);
@@ -21,6 +21,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        //
+        Schema::dropIfExists('coupons');
     }
 };

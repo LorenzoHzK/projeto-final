@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class categories extends Model
 {
     use HasFactory;
-    protected $filable = [
+    protected $fillable = [
         'name',
-        'description'
+        'description',
+        'created_by'
     ];
 }

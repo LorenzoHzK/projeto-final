@@ -3,53 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\CouponsServices;
 
 class CouponsController extends Controller
 {
-    public function index()
+    protected $couponsServices;
+
+    public function __construct(CouponsServices $couponsServices)
     {
-        $coupons = Coupons::all();
-        return response()->json($coupons);
+        $this->couponsServices = $couponsServices;
     }
 
-    public function store(Request $request)
+    public function createCoupons(Request $request)
     {
-        $orders = Coupons::create([
-            "code" => $request->code,
-            "startDate" => $request->startDate,
-            "endDate" => $request->endDate,
-            "discount" => $request->discount
-        ]);
-
-        return response()->json([
-            "message" => "Coupon created successfully",
-            "coupons" => $orders
-        ]);
+        return $this->couponsServices->createCoupons($request);
     }
 
-    public function show(string $id)
+    public function showCoupons(string $id = null)
     {
-        $orders = Coupons::findOrFail($id);
-        return response()->json($orders);
+        return $this->couponsServices->showCoupons($id);
     }
 
-    public function update(Request $request, string $id)
+    public function updateCoupons(Request $request, string $id)
     {
-        $orders = Coupons::findOrFail($id);
-        $orders->update([
-            "startDate" => $request->startDate,
-            "endDate" => $request->endDate,
-            "discount" => $request->discount
-        ]);
-
-        return response()->json([
-            "message" => "Coupon updated successfully",
-            "coupons" => $orders
-        ]);
+        return $this->couponsServices->updateCoupons($request, $id);
     }
 
-    public function destroy(string $id)
+    public function deleteCoupons(string $id)
     {
-        //
+        return $this->couponsServices->deleteCoupons($id);
     }
 }

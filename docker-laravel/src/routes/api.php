@@ -2,6 +2,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\CouponsController;
 
 // AUTENTICACAO - Rotas para o login e registro do usuário -
 Route::post('/register', [UserController::class, 'register']);
@@ -22,3 +24,16 @@ Route::middleware('auth:sanctum')->get('/address/{id?}', [AddressController::cla
 Route::middleware('auth:sanctum')->post('/address', [AddressController::class, 'createAddress']);
 Route::middleware('auth:sanctum')->delete('/address/{id}', [AddressController::class, 'deleteAddress']);
 Route::middleware('auth:sanctum')->put('/address/{id}', [AddressController::class, 'updateAddress']);
+
+// Rotas para Categories
+Route::middleware('auth:sanctum')->get('/categories/{id?}', [CategoriesController::class, 'showCategories']);
+Route::middleware('auth:sanctum')->post('/categories', [CategoriesController::class, 'createCategories']);
+Route::middleware('auth:sanctum')->delete('/categories/{id}', [CategoriesController::class, 'deleteCategory']);
+Route::middleware('auth:sanctum')->put('/categories/{id}', [CategoriesController::class, 'updateCategory']);
+Route::middleware('auth:sanctum')->get('/categories/user/{user_id}', [CategoriesController::class, 'categoriesByUser']);
+
+// Rotas para Coupons
+Route::middleware('auth:sanctum')->get('/coupon/{id?}', [CouponsController::class, 'showCoupons']);
+Route::middleware('auth:sanctum')->post('/coupon', [CouponsController::class, 'createCoupons']);
+Route::middleware('auth:sanctum')->delete('/coupon/{id}', [CouponsController::class, 'deleteCoupons']);
+Route::middleware('auth:sanctum')->put('/coupon/{id}', [CouponsController::class, 'updateCoupons']);

@@ -1,12 +1,18 @@
 <?php
-namespace app\Services;
+namespace App\Services;
 
-use App\Repositories\UserRepository;
-use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\UserRepository;
 class UserService
 {
+    protected $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /* registro do usuario */
     public function registerUser(Request $request)
     {
@@ -115,7 +121,7 @@ class UserService
     {
         $user = auth()->user();
 
-        $validated = $request ->validate([
+        $userData = $request ->validate([
             "name" => "required|string|min:3",
             "email" => "required|email|unique:users,email",
             "password" => "required|string|min:8"

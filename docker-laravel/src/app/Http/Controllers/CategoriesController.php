@@ -3,50 +3,39 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\CategoriesService;
 
 class CategoriesController extends Controller
 {
-    public function index()
+    protected $categoriesService;
+
+    public function __construct(CategoriesService $categoriesService)
     {
-        $categories = Categories::all();
-        return response()->json($categories);
+        $this->categoriesService = $categoriesService;
     }
 
-    public function store(Request $request)
+    public function createCategories(Request $request)
     {
-        $categories = Categories::create([
-            "name" => $request->name,
-            "description" => $request->description
-        ]);
-
-        return response()->json([
-            "message" => "Category created successfully",
-            "categories" => $categories
-        ]);
+        return $this->categoriesService->createCategories($request);
     }
 
-    public function show(string $id)
+    public function showCategories(string $id = null)
     {
-        $categories = Categories::findOrFail($id);
-        return response()->json($categories);
+        return $this->categoriesService->showCategories($id);
     }
 
-    public function update(Request $request, string $id)
+    public function updateCategory(Request $request, string $id)
     {
-        $categories = Categories::findOrFail($id);
-        $categories->update([
-            "name" => $request->name,
-            "description" => $request->description
-        ]);
-
-        return response()->json([
-            "message" => "Category updated successfully",
-            "categories" => $categories
-        ]);
+        return $this->categoriesService->updateCategory($request, $id);
     }
 
-    public function destroy(string $id)
+    public function deleteCategory(string $id)
     {
-        //
+        return $this->categoriesService->deleteCategory($id);
+    }
+
+    public function categoriesByUser(string $id_user = null)
+    {
+        return $this->categoriesService->categoriesByUser($id_user);
     }
 }

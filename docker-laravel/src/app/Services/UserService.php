@@ -7,10 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class UserService
 {
-    public function __construct(protected UserRepository $userRepository)
-    {
-    }
-
     /* registro do usuario */
     public function registerUser(Request $request)
     {
@@ -20,11 +16,6 @@ class UserService
             "password" => "required|string|min:8"
         ]);
 
-        $userData = [
-            "email" => $request->email,
-            "name" => $request->name,
-            "password" => $request ->password
-        ];
         return $this->userRepository->create($userData);
     }
 

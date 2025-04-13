@@ -4,58 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Models\address;
 use Illuminate\Http\Request;
+use App\Services\AddressService;
 
 class AddressController extends Controller
 {
-    public function index()
+    protected $addressService;
+
+    public function __construct(AddressService $addressService)
     {
-        $address = address::all();
-        return response()->json($address);
+        $this->addressService = $addressService;
     }
 
-    public function store(Request $request)
+    public function createAddress(Request $request)
     {
-        $address = Address ::create([
-            "street" => $request->street,
-            "number" => $request->number,
-            "zipcode" => $request->zipcode,
-            "city" => $request->city,
-            "state" => $request->state,
-            "country" => $request->country
-        ]);
-
-        return response()->json([
-            "message" => "Address created successfully",
-            "address" => $address
-        ]);
+        return $this->addressService->createAddress($request);
     }
 
-    public function show(string $id)
+    public function showAddress($id = null)
     {
-        $address = address::find($id);
-        return response()->json($address);
+        return $this->addressService->showAddress($id);
     }
 
-    public function update(Request $request, string $id)
-    {
-        $address = address::find($id);
-        $address->update([
-            "street" => $request->street,
-            "number" => $request->number,
-            "zipcode" => $request->zipcode,
-            "city" => $request->city,
-            "state" => $request->state,
-            "country" => $request->country
-        ]);
-
-        return response()->json([
-            "message" => "Address updated successfully",
-            "address" => $address
-        ]);
+    public function deleteAddress(string $id){
+        return $this->addressService->deleteAddress($id);
     }
 
-    public function destroy(string $id)
-    {
-        //
-    }
+    public function updateAddress(Request $request, String $id)
+        {
+        return $this->addressService->updateAddress($request, $id);
+        }
 }

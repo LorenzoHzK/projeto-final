@@ -14,11 +14,6 @@ class UserRepository
         $this->model = $user;
     }
 
-    public function getAll(): Collection
-    {
-        return $this->model->all();
-    }
-
     public function find(int $id): ?User
     {
         return $this->model->find($id);

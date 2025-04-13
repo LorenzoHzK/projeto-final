@@ -14,6 +14,7 @@ class Address extends Model
         'city',
         'state',
         'country',
+        'user_id'
     ];
 
     use HasFactory;

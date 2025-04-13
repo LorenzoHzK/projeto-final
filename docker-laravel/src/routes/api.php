@@ -18,4 +18,7 @@ Route::middleware('auth:sanctum')->post('/user/create/moderator', [UserControlle
 
 
 // Rotas para o address
-Route::middleware('auth:sanctum')->resource('/address',AddressController::class);
+Route::middleware('auth:sanctum')->get('/address/{id?}', [AddressController::class, 'showAddress']);
+Route::middleware('auth:sanctum')->post('/address', [AddressController::class, 'createAddress']);
+Route::middleware('auth:sanctum')->delete('/address/{id}', [AddressController::class, 'deleteAddress']);
+Route::middleware('auth:sanctum')->put('/address/{id}', [AddressController::class, 'updateAddress']);

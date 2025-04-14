@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('coupons', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('code');
-            $table->date('startDate');
-            $table->date('endDate');
+            $table->date('Y-m-d')('startDate');
+            $table->date('Y-m-d')('endDate');
             $table->decimal('discount', 10,2);
 
             $table->timestamps();

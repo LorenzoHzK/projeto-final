@@ -19,15 +19,15 @@ class CouponsServices
     {
         if (!auth()->user() || auth()->user()->role !== 'Admin') {
             return response()->json([
-                'message' => 'Apenas administradores podem criar categorias'
+                'message' => 'Just Admins can create coupons'
             ], 403);
         }
 
         $validatedData = $request->validate([
-            'code' =>'required|string|min:3|max:255|unique:coupons,code',
+            'code' =>'required|string|min:3|max:255|unique:coupons',
             'startDate' => 'required|date',
             'endDate' => 'required|date',
-            'discount' => 'required|decimal'
+            'discount' => 'required|required'
         ]);
 
         $validatedData['created_by'] = auth()->id();
@@ -65,8 +65,10 @@ class CouponsServices
         $coupons = Coupons::find($id);
 
         $validated = $request->validate([
-            'name' => 'required|string|min:3|max:255',
-            'description' => 'nullable|string|max:500'
+            'code' =>'required|string|min:3|max:255|unique:coupons',
+            'startDate' => 'required|date',
+            'endDate' => 'required|date',
+            'discount' => 'sometimes|required'
         ]);
 
         $coupons->update($validated);

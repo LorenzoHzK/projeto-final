@@ -6,7 +6,7 @@ use App\Models\Coupons;
 use Illuminate\Http\Request;
 use App\Repositories\CouponsRepository;
 
-class CouponsServices
+class CouponsService
 {
     protected $couponsRepository;
 
@@ -27,7 +27,7 @@ class CouponsServices
             'code' =>'required|string|min:3|max:255|unique:coupons',
             'startDate' => 'required|date',
             'endDate' => 'required|date',
-            'discount' => 'required|required'
+            'discount' => 'required|decimal'
         ]);
 
         $validatedData['created_by'] = auth()->id();

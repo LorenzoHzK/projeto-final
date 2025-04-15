@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CouponsController;
+use App\Http\Controllers\DiscountController;
 
 // AUTENTICACAO - Rotas para o login e registro do usuário -
 Route::post('/register', [UserController::class, 'register']);
@@ -37,3 +38,9 @@ Route::middleware('auth:sanctum')->get('/coupon/{id?}', [CouponsController::clas
 Route::middleware('auth:sanctum')->post('/coupon', [CouponsController::class, 'createCoupons']);
 Route::middleware('auth:sanctum')->delete('/coupon/{id}', [CouponsController::class, 'deleteCoupons']);
 Route::middleware('auth:sanctum')->put('/coupon/{id}', [CouponsController::class, 'updateCoupons']);
+
+// Rotas para Discounts
+Route::middleware('auth:sanctum')->get('/discount/{id?}', [DiscountController::class, 'showDiscount']);
+Route::middleware('auth:sanctum')->post('/discount', [DiscountController::class, 'createDiscount']);
+Route::middleware('auth:sanctum')->delete('/discount/{id}', [DiscountController::class, 'deleteDiscount']);
+Route::middleware('auth:sanctum')->put('/discount/{id}', [DiscountController::class, 'updateDiscount']);

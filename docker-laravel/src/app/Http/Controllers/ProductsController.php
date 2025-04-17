@@ -2,58 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ProductsService;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    protected $productsService;
+
+    public function __construct(productsService $productsService)
     {
-        $products = Products::all();
-        return response()->json($products);
+        $this->productsService = $productsService;
     }
 
-    public function store(Request $request)
+    public function createProducts(Request $request)
     {
-        $products = Products::create([
-            "category_id" => $request->category_id,
-            "name" => $request->name,
-            "stock" => $request->stock,
-            "price" => $request->price
-        ]);
-
-        return response()->json([
-            "message" => "Product created successfully",
-            "products" => $products
-        ]);
+        return $this->productsService->createProducts($request);
     }
 
-    public function show(string $id)
+    public function showProducts($id = null)
     {
-        $products = Products::findOrFail($id);
-        return response()->json($products);
+        return $this->productsService->showProducts($id);
     }
 
-    public function update(Request $request, string $id)
+    public function productsByCategory($category_id = null)
     {
-        $products = Products::findOrFail($id);
-        $products->update([
-            "category_id" => $request->category_id,
-            "name" => $request->name,
-            "stock" => $request->stock,
-            "price" => $request->price
-        ]);
-
-        return response()->json([
-            "message" => "Product updated successfully",
-            "products" => $products
-        ]);
+        return $this->productsService->productsByCategory($category_id);
     }
 
-    public function destroy(string $id)
+    public function updateProducts(Request $request, String $id)
     {
-        //
+        return $this->productsService->updateProducts($request, $id);
+    }
+
+    public function deleteProducts(string $id)
+    {
+        return $this->productsService->deleteProducts($id);
+    }
+
+    public function updateStock(string $id, Request $request)
+    {
+        return $this->productsService->updateStock($id, $request);
     }
 }

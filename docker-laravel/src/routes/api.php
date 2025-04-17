@@ -5,6 +5,8 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CouponsController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\CartsController;
 
 // AUTENTICACAO - Rotas para o login e registro do usuário -
 Route::post('/register', [UserController::class, 'register']);
@@ -44,3 +46,14 @@ Route::middleware('auth:sanctum')->get('/discount/{id?}', [DiscountController::c
 Route::middleware('auth:sanctum')->post('/discount', [DiscountController::class, 'createDiscount']);
 Route::middleware('auth:sanctum')->delete('/discount/{id}', [DiscountController::class, 'deleteDiscount']);
 Route::middleware('auth:sanctum')->put('/discount/{id}', [DiscountController::class, 'updateDiscount']);
+
+//Rotas para Products
+Route::middleware('auth:sanctum')->get('/products/{id?}', [ProductsController::class, 'showProducts']);
+Route::middleware('auth:sanctum')->get('/products/category/{category_id}', [ProductsController::class, 'productsByCategory']);
+Route::middleware('auth:sanctum')->post('/products', [ProductsController::class, 'createProducts']);
+Route::middleware('auth:sanctum')->put('/products/{id?}', [ProductsController::class, 'updateProducts']);
+Route::middleware('auth:sanctum')->delete('/products/{id?}', [ProductsController::class, 'deleteProducts']);
+Route::middleware('auth:sanctum')->delete('/products/{id?}/stock', [ProductsController::class, 'updateStock']);
+
+// Rotas para Carts
+Route::middleware('auth:sanctum')->get('/cart/', [CartsController::class, 'showCart']);

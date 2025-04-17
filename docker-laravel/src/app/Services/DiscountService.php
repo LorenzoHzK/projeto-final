@@ -18,7 +18,7 @@ class DiscountService
 
     public function createDiscount(Request $request)
     {
-        if (!auth()->user() || auth()->user()->role !== 'Admin') {
+        if (auth()->user()->role !== 'Admin' && auth()->user()->role !== 'Moderator') {
             return response()->json([
                 'message' => 'Just Admins can create discount'
             ], 403);
@@ -46,7 +46,8 @@ class DiscountService
         if ($id) {
             $discount = Discount::find($id);
             return response()->json(['Discount' => $discount]);
-        } else {
+        }
+        else{
             $discount = Discount::all();
             return response()->json(['Discount' => $discount]);
         }

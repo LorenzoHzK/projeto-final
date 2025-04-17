@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('name');
             $table->integer('stock');
             $table->decimal('price', 10,2);
+
+            $table->timestamps();
         });
     }
 

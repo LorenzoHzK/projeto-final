@@ -2,47 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Services\CartsService;
 
 class CartsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $carts = Carts::all();
-        return response()->json($carts);
-    }
+    protected CartsService $cartsService;
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function __construct(CartsService $cartsService)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $carts = Carts::findOrFail($id);
-        return response()->json($carts);
+        $this->cartsService = $cartsService;
     }
 
 
-    public function update(Request $request, string $id)
+    public function showCart(string $id = null)
     {
-        //
+        return $this->cartsService->showCart($id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function createCart()
     {
-        //
+        return $this->cartsService->createCart();
+    }
+
+    public function cartItem()
+    {
+        return $this->cartsServices->cartItem();
+    }
+
+    public function clearCartItem()
+    {
+        return $this->cartsService->clearCartItem();
+    {
+
+    }
     }
 }

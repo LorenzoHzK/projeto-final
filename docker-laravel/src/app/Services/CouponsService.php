@@ -15,6 +15,17 @@ class CouponsService
         $this->couponsRepository = $couponsRepository;
     }
 
+    public function showCoupons($id = null)
+    {
+        if ($id) {
+            $coupons = Coupons::find($id);
+            return response()->json(['coupons' => $coupons]);
+        } else {
+            $coupons = Coupons::all();
+            return response()->json(['coupons' => $coupons]);
+        }
+    }
+
     public function createCoupons(Request $request)
     {
         if (!auth()->user() || auth()->user()->role !== 'Admin') {
@@ -27,28 +38,17 @@ class CouponsService
             'code' =>'required|string|min:3|max:255|unique:coupons',
             'startDate' => 'required|date',
             'endDate' => 'required|date',
-            'discount' => 'required|decimal'
+            'discount' => 'required'
         ]);
 
-        $validatedData['created_by'] = auth()->id();
+        $validatedData['discount'] = $validatedData['discount'] / 100;
 
         $coupons = $this->couponsRepository->create($validatedData);
 
         return response()->json([
-            'message' => 'Categoria criada com sucesso',
+            'message' => 'Discount created with success',
             'data' => $coupons
         ], 201);
-    }
-
-    public function showCoupons($id = null)
-    {
-        if ($id) {
-            $coupons = Coupons::find($id);
-            return response()->json(['coupons' => $coupons]);
-        } else {
-            $coupons = Coupons::all();
-            return response()->json(['coupons' => $coupons]);
-        }
     }
 
     public function deleteCoupons(string $id)

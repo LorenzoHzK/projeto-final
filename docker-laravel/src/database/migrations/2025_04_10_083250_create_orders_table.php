@@ -19,8 +19,8 @@ return new class extends Migration
 
             $table->datetime('orderDate');
 
-            $table->unsignedBigInteger('cupon_id');
-            $table->foreign('cupon_id')->references('id')->on('coupons')->nullable()->onDelete('cascade');
+            $table->unsignedBigInteger('coupon_id')->nullable();
+            $table->foreign('coupon_id')->references('id')->on('coupons')->onDelete('cascade');
 
             $table->string('status')->enum('Pending', 'Processing', 'Shipped', 'Completed', 'Canceled');
             $table->decimal('totalAmount', 10,2);

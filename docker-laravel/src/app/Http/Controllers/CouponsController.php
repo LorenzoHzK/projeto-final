@@ -14,14 +14,14 @@ class CouponsController extends Controller
         $this->couponsServices = $couponsServices;
     }
 
-    public function createCoupons(Request $request)
-    {
-        return $this->couponsServices->createCoupons($request);
-    }
-
     public function showCoupons(string $id = null)
     {
         return $this->couponsServices->showCoupons($id);
+    }
+
+    public function createCoupons(Request $request)
+    {
+        return $this->couponsServices->createCoupons($request);
     }
 
     public function updateCoupons(Request $request, string $id)

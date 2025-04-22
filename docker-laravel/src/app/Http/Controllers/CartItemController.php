@@ -2,45 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CartItemService;
 use Illuminate\Http\Request;
 
 class CartItemController extends Controller
 {
-    public function index()
+    protected CartItemService $cartItemService;
+
+    public function __construct(CartItemService $cartItemService)
     {
-        $cartItem = CartItem::all();
-        return response()->json($cartItem);
+        return $this->cartItemService = $cartItemService;
     }
 
-    public function store(Request $request)
+    public function cartItems()
     {
-        Schema::create('cart_items', function (Blueprint $table) {
-            $table->integer('id');
-
-            $table->unsignedBigInteger('cart_id')->unique();
-            $table->foreign('cart_id')->references('id')->on('carts');
-
-            $table->UnsignedInteger('product_id')->unique();
-            $table->foreign('product_id')->references('id')->on('products');
-            $table->integer('quantity');
-        });
+        return $this->cartItemService->showItems();
     }
 
-    public function show(string $id)
+    public function createCartItem(Request $request)
     {
-        $cartItem = CartItem::findOrFail($id);
-        return response()->json($cartItem);
+        return $this->cartItemService->createCartItem($request);
     }
 
-    public function update(Request $request, string $id)
+    public function updateCartItem(Request $request)
     {
-        $cartItem = CartItem::findOrFail($id);
-        $cartItem->update($request->all());
-        return response()->json($cartItem);
+        return $this->cartItemService->updateCartItem($request);
     }
 
-    public function destroy(string $id)
+    public function deleteCartItem(Request $request)
     {
-        //
+        return $this->cartItemService->deleteCartItem($request);
     }
 }

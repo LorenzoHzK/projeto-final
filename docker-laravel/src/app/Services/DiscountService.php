@@ -28,10 +28,11 @@ class DiscountService
             'description' => 'required|string|min:3|max:255',
             'startDate' => 'required|date',
             'endDate' => 'required|date',
-            'discount' => 'required'
+            'discount' => 'required',
+            'product_id' => 'required|integer',
         ]);
 
-        $validatedData['created_by'] = auth()->id();
+        $validatedData['discount'] = $validatedData['discount'] / 100;
 
         $discount = $this->discountRepository->create($validatedData);
 

@@ -7,53 +7,77 @@ use App\Http\Controllers\CouponsController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\CartsController;
+use App\Http\Controllers\CartItemController;
+use App\Http\Controllers\OrdersController;
 
-// AUTENTICACAO - Rotas para o login e registro do usuário -
+// Authentication - Route to o login and register of user
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
-Route::middleware('auth:sanctum')->post('/logout', [UserController::class, 'logout']);
-route::middleware('auth:sanctum')->post('/renew/token', [UserController::class, 'renewToken']);
-route::middleware('auth:sanctum')->get('/verify/token', [UserController::class, 'verifyToken']);
 
-//Rotas para o User
-Route::middleware('auth:sanctum')->get('/user/me', [UserController::class, 'info_user']);
-Route::middleware('auth:sanctum')->put('/user/me', [UserController::class, 'update_user']);
-Route::middleware('auth:sanctum')->delete('/user/me', [UserController::class, 'delete_user']);
-Route::middleware('auth:sanctum')->post('/user/create/moderator', [UserController::class, 'create_moderator']);
+Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    Route::post('/logout', [UserController::class, 'logout']);
+    Route::post('/renew/token', [UserController::class, 'renewToken']);
+    Route::get('/verify/token', [UserController::class, 'verifyToken']);
+
+    //Route to User
+    Route::get('/user/me', [UserController::class, 'info_user']);
+    Route::put('/user/me', [UserController::class, 'update_user']);
+    Route::delete('/user/me', [UserController::class, 'delete_user']);
+    Route::post('/user/create/moderator', [UserController::class, 'create_moderator']);
 
 
-// Rotas para o address
-Route::middleware('auth:sanctum')->get('/address/{id?}', [AddressController::class, 'showAddress']);
-Route::middleware('auth:sanctum')->post('/address', [AddressController::class, 'createAddress']);
-Route::middleware('auth:sanctum')->delete('/address/{id}', [AddressController::class, 'deleteAddress']);
-Route::middleware('auth:sanctum')->put('/address/{id}', [AddressController::class, 'updateAddress']);
+    // Route to address
+    Route::get('/address/{id?}', [AddressController::class, 'showAddress']);
+    Route::post('/address', [AddressController::class, 'createAddress']);
+    Route::delete('/address/{id}', [AddressController::class, 'deleteAddress']);
+    Route::put('/address/{id}', [AddressController::class, 'updateAddress']);
 
-// Rotas para Categories
-Route::middleware('auth:sanctum')->get('/categories/{id?}', [CategoriesController::class, 'showCategories']);
-Route::middleware('auth:sanctum')->post('/categories', [CategoriesController::class, 'createCategories']);
-Route::middleware('auth:sanctum')->delete('/categories/{id}', [CategoriesController::class, 'deleteCategory']);
-Route::middleware('auth:sanctum')->put('/categories/{id}', [CategoriesController::class, 'updateCategory']);
-Route::middleware('auth:sanctum')->get('/categories/user/{user_id}', [CategoriesController::class, 'categoriesByUser']);
+    // Route for Categories
+    Route::get('/categories/{id?}', [CategoriesController::class, 'showCategories']);
+    Route::post('/categories', [CategoriesController::class, 'createCategories']);
+    Route::delete('/categories/{id}', [CategoriesController::class, 'deleteCategory']);
+    Route::put('/categories/{id}', [CategoriesController::class, 'updateCategory']);
+    Route::get('/categories/user/{user_id}', [CategoriesController::class, 'categoriesByUser']);
 
-// Rotas para Coupons
-Route::middleware('auth:sanctum')->get('/coupon/{id?}', [CouponsController::class, 'showCoupons']);
-Route::middleware('auth:sanctum')->post('/coupon', [CouponsController::class, 'createCoupons']);
-Route::middleware('auth:sanctum')->delete('/coupon/{id}', [CouponsController::class, 'deleteCoupons']);
-Route::middleware('auth:sanctum')->put('/coupon/{id}', [CouponsController::class, 'updateCoupons']);
+    // Route to Coupons
+    Route::get('/coupon/{id?}', [CouponsController::class, 'showCoupons']);
+    Route::post('/coupon', [CouponsController::class, 'createCoupons']);
+    Route::delete('/coupon/{id}', [CouponsController::class, 'deleteCoupons']);
+    Route::put('/coupon/{id}', [CouponsController::class, 'updateCoupons']);
 
-// Rotas para Discounts
-Route::middleware('auth:sanctum')->get('/discount/{id?}', [DiscountController::class, 'showDiscount']);
-Route::middleware('auth:sanctum')->post('/discount', [DiscountController::class, 'createDiscount']);
-Route::middleware('auth:sanctum')->delete('/discount/{id}', [DiscountController::class, 'deleteDiscount']);
-Route::middleware('auth:sanctum')->put('/discount/{id}', [DiscountController::class, 'updateDiscount']);
+    // Route to Discounts
+    Route::get('/discount/{id?}', [DiscountController::class, 'showDiscount']);
+    Route::post('/discount', [DiscountController::class, 'createDiscount']);
+    Route::delete('/discount/{id}', [DiscountController::class, 'deleteDiscount']);
+    Route::put('/discount/{id}', [DiscountController::class, 'updateDiscount']);
 
-//Rotas para Products
-Route::middleware('auth:sanctum')->get('/products/{id?}', [ProductsController::class, 'showProducts']);
-Route::middleware('auth:sanctum')->get('/products/category/{category_id}', [ProductsController::class, 'productsByCategory']);
-Route::middleware('auth:sanctum')->post('/products', [ProductsController::class, 'createProducts']);
-Route::middleware('auth:sanctum')->put('/products/{id?}', [ProductsController::class, 'updateProducts']);
-Route::middleware('auth:sanctum')->delete('/products/{id?}', [ProductsController::class, 'deleteProducts']);
-Route::middleware('auth:sanctum')->delete('/products/{id?}/stock', [ProductsController::class, 'updateStock']);
+    //Route to Products
+    Route::get('/products/{id?}', [ProductsController::class, 'showProducts']);
+    Route::get('/products/category/{category_id}', [ProductsController::class, 'productsByCategory']);
+    Route::post('/products', [ProductsController::class, 'createProducts']);
+    Route::put('/products/{id?}', [ProductsController::class, 'updateProducts']);
+    Route::delete('/products/{id?}', [ProductsController::class, 'deleteProducts']);
+    Route::delete('/products/{id?}/stock', [ProductsController::class, 'updateStock']);
 
-// Rotas para Carts
-Route::middleware('auth:sanctum')->get('/cart/', [CartsController::class, 'showCart']);
+// Route to Carts
+    Route::get('/cart/', [CartsController::class, 'showCart']);
+    Route::post('/cart/', [CartsController::class, 'createCart']);
+
+// Route to CartItem
+    Route::get('/cart/items', [CartItemController::class, 'cartItems']);
+    Route::put('/cart/items', [CartItemController::class, 'updateCartItem']);
+    Route::post('/cart/items', [CartItemController::class, 'createCartItem']);
+    Route::delete('/cart/items', [CartItemController::class, 'deleteCartItem']);
+
+// Route to clean the CartItem
+    Route::delete('/cart/clear', [CartsController::class, 'clearCartItem']);
+
+//Route to orders
+    Route::get('/orders', [OrdersController::class, 'showOrders']);
+    Route::post('/orders', [OrdersController::class, 'createOrders']);
+    Route::get('/orders/{order_id}', [OrdersController::class, 'specificOrders']);
+    Route::put('/orders/{order_id}', [OrdersController::class, 'updateOrders']);
+    Route::delete('/orders/{id}', [OrdersController::class, 'deleteOrders']);
+});
+

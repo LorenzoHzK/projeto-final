@@ -3,64 +3,41 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Orders;
+use App\Services\OrdersService;
+use App\Services\OrderItemService;
 
 class OrdersController extends Controller
 {
-    public function index()
+    protected OrdersService $ordersService;
+    protected OrderItemService $orderItemService;
+
+    public function __construct(ordersService $ordersService, orderItemService $orderItemService)
     {
-        $orders = Orders::all();
-        return response()->json($orders);
+        $this->ordersService = $ordersService;
+        $this->orderItemService = $orderItemService;
     }
+   public function showOrders()
+   {
+       return $this->ordersService->showOrders();
+   }
 
-    public function store(Request $request)
-    {
-        $orders = Orders::create([
-            "user_id" => $request->user_id,
-            "address_id" => $request->address_id,
-            "orderDate" => $request->orderDate,
-            "cupon_id" => $request->cupon_id,
-            "status" => $request->status,
-            "totalAmount" => $request->totalAmount
-        ]);
+   public function createOrders(Request $request, OrderItemService $orderItemService)
+   {
+       return $this->ordersService->createOrders($request, $orderItemService);
+   }
 
-        return response()->json([
-            "message" => "Order created successfully",
-            "orders" => $orders
-        ]);
-    }
+   public function specificOrders($order_id)
+   {
+        return $this->ordersService->specificOrders($order_id);
+   }
 
-    public function show(string $id)
-    {
-        $orders = Orders::findOrFail($id);
-        return response()->json($orders);
-    }
+   public function updateOrders(Request $request, $order_id)
+   {
+       return $this->ordersService->updateOrders($request ,$order_id);
+   }
 
-    public function update(Request $request, string $id)
-    {
-        $orders = Orders::findOrFail($id);
-        $orders->update([
-            "user_id" => $request->user_id,
-            "address_id" => $request->address_id,
-            "orderDate" => $request->orderDate,
-            "cupon_id" => $request->cupon_id,
-            "status" => $request->status,
-            "totalAmount" => $request->totalAmount
-        ]);
-
-        return response()->json([
-            "message" => "Order updated successfully",
-            "orders" => $orders
-        ]);
-    }
-
-    public function destroy(string $id)
-    {
-        $orders = Orders::findOrFail($id);
-        $orders->delete()-onDelete('cascade');
-
-        return response()->json([
-            "message" => "Order deleted successfully"
-        ]);
-    }
+   public function deleteOrders($order_id)
+   {
+       return $this->ordersService->deleteOrders($order_id);
+   }
 }

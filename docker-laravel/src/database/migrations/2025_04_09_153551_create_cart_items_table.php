@@ -8,20 +8,24 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('order_itens', function (Blueprint $table) {
+        Schema::create('cart_items', function (Blueprint $table) {
             $table->id();
 
-            $table->UnsignedBigInteger('order_id');
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->unsignedBigInteger('cart_id');
+            $table->foreign('cart_id')->references('id')->on('carts');
 
-            $table->UnsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
 
             $table->integer('quantity');
+            $table->decimal('unit_price', 10,2);
+
+            $table->timestamps();
         });
     }
+
     public function down(): void
     {
-        Schema::dropIfExists('order_itens');
+        Schema::dropIfExists('items');
     }
 };

@@ -12,6 +12,7 @@ class discount extends Model
         'description',
         'startDate',
         'endDate',
-        'discount'
+        'discount',
+        'product_id'
     ];
 }

@@ -14,15 +14,16 @@ class ProductsController extends Controller
         $this->productsService = $productsService;
     }
 
-    public function createProducts(Request $request)
+    public function uploadImage(Request $request, $product_id)
     {
-        return $this->productsService->createProducts($request);
+        return $this->productsService->uploadImage($request, $product_id);
     }
 
-    public function showProducts($id = null)
+    public function showImage($product_id)
     {
-        return $this->productsService->showProducts($id);
+        return $this->productsService->showImage($product_id);
     }
+
 
     public function productsByCategory($category_id = null)
     {

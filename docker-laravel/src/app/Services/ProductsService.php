@@ -2,9 +2,11 @@
 
  namespace App\Services;
 
+ use App\Models\categories;
  use App\Models\products;
  use App\Repositories\ProductsRepository;
  use Illuminate\Http\Request;
+ use Illuminate\Support\Facades\Storage;
 
  class ProductsService
  {
@@ -35,6 +37,13 @@
              return response()->json([
                  'message' => 'Product with this name already exists'
              ], 409);
+         }
+
+         if (!Categories::where('id', $validatedData['category_id'])->exists())
+         {
+             return response()->json([
+                 'message' => 'Category not found'
+             ]);
          }
 
          $validatedData = $this->productsRepository->create($validatedData);
@@ -138,4 +147,50 @@
             "products" => $products
         ]);
     }
+
+     public function uploadImage(Request $request, $product_id)
+     {
+         $product = $this->productsRepository->find($product_id);
+
+         if (!$product) {
+             return response()->json(['message' => 'Product not found'], 404);
+         }
+
+         if ($request->hasFile('image_path')) {
+             $path = $request->file('image_path')->store('products', 'public');
+
+             $product->image = $path;
+             $product->save();
+
+             return response()->json([
+                 'message' => 'Product image uploaded successfully',
+             ]);
+         }
+
+         return response()->json([
+             'message' => 'No image was uploaded'
+         ], 400);
+     }
+
+     public function showImage($product_id)
+     {
+         $product = $this->productsRepository->find($product_id);
+
+         if (!$product) {
+             return response()->json(['message' => 'Product not found'], 404);
+         }
+
+         if (!$product->image) {
+             return response()->json(['message' => 'Product has no image'], 404);
+         }
+
+         $path = $product->image;
+
+         if (!Storage::disk('public')->exists($path)) {
+             return response()->json(['message' => 'Image file not found in storage'], 404);
+         }
+
+         return response(Storage::disk('public')->get($path), 200)
+             ->header('Content-Type', Storage::disk('public')->mimeType($path));
+     }
  }

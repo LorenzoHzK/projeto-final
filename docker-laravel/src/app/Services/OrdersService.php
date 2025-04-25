@@ -97,6 +97,7 @@ class OrdersService
 
         if ($validatedData)
         $orderItemService->createFromCart($Order->id, $cartItems);
+        $cartItem->delete();
 
         return response ()->json([
             'message' => 'Order created with success',

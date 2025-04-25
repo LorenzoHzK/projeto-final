@@ -14,7 +14,8 @@ return new class extends Migration
             $table->date('startDate');
             $table->date('endDate');
             $table->decimal('discount',5,2);
-            $table->unsignedBigInteger('product_id');
+
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products');
 
             $table->timestamps();

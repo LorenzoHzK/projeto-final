@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Models\discount;
+use App\Models\products;
 use Illuminate\Http\Request;
 use App\Repositories\DiscountRepository;
 
@@ -28,11 +29,24 @@ class DiscountService
             'description' => 'required|string|min:3|max:255',
             'startDate' => 'required|date',
             'endDate' => 'required|date',
-            'discount' => 'required',
+            'discount' => 'required|numeric|min:0|max:100',
             'product_id' => 'required|integer',
         ]);
 
         $validatedData['discount'] = $validatedData['discount'] / 100;
+        $product = products::find($validatedData['product_id']);
+        if ($product)
+        {
+            $discountValue = $product->price * $validatedData['discount'];
+            $product->update([
+                'price' => $product->price - $discountValue,
+            ]);
+        }
+        else{
+            return response()->json([
+                'message' => 'Product not found'
+            ], 404);
+        }
 
         $discount = $this->discountRepository->create($validatedData);
 

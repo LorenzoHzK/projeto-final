@@ -1,6 +1,6 @@
 <?php
-
 namespace App\Repositories;
+
 use App\Models\products;
 
 class ProductsRepository
@@ -16,4 +16,15 @@ class ProductsRepository
     {
         return $this->model->create($data);
     }
+
+    public function find($id)
+    {
+        return $this->model->find($id);
+    }
+
+    public function save($product)
+    {
+        return $product->save();
+    }
 }
+

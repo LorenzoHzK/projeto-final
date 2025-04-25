@@ -34,7 +34,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/address/{id}', [AddressController::class, 'updateAddress']);
 
     // Route for Categories
-    Route::get('/categories/{id?}', [CategoriesController::class, 'showCategories']);
+    Route::get('/categories/{id?}', [CategoriesController::class, 'showCategories'])->withoutMiddleware(['auth:sanctum']);
     Route::post('/categories', [CategoriesController::class, 'createCategories']);
     Route::delete('/categories/{id}', [CategoriesController::class, 'deleteCategory']);
     Route::put('/categories/{id}', [CategoriesController::class, 'updateCategory']);
@@ -53,6 +53,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/discount/{id}', [DiscountController::class, 'updateDiscount']);
 
     //Route to Products
+    Route::post('/image/product/{product_id}', [ProductsController::class, 'uploadImage']);
+    Route::get('/image/product/{product_id}', [ProductsController::class, 'showImage']);
+
     Route::get('/products/{id?}', [ProductsController::class, 'showProducts']);
     Route::get('/products/category/{category_id}', [ProductsController::class, 'productsByCategory']);
     Route::post('/products', [ProductsController::class, 'createProducts']);

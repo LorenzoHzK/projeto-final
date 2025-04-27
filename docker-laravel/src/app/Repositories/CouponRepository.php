@@ -2,13 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Models\Coupons;
+use App\Models\Coupon;
 
-class CouponsRepository
+class CouponRepository
 {
     protected $model;
 
-    public function __construct(Coupons $model)
+    public function __construct(Coupon $model)
     {
         $this->model = $model;
     }

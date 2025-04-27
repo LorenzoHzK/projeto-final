@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\OrdersService;
+use App\Services\OrderService;
 use App\Services\OrderItemService;
 
 class OrdersController extends Controller
 {
-    protected OrdersService $ordersService;
+    protected OrderService $ordersService;
     protected OrderItemService $orderItemService;
 
-    public function __construct(ordersService $ordersService, orderItemService $orderItemService)
+    public function __construct(OrderService $ordersService, OrderItemService $orderItemService)
     {
         $this->ordersService = $ordersService;
         $this->orderItemService = $orderItemService;
@@ -21,12 +21,12 @@ class OrdersController extends Controller
        return $this->ordersService->showOrders();
    }
 
-   public function createOrders(Request $request, OrderItemService $orderItemService)
+   public function createOrders(Request $request)
    {
-       return $this->ordersService->createOrders($request, $orderItemService);
+       return $this->ordersService->createOrders($request);
    }
 
-   public function specificOrders($order_id)
+   public function specificOrders(int $order_id)
    {
         return $this->ordersService->specificOrders($order_id);
    }

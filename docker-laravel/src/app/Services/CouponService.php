@@ -2,15 +2,15 @@
 
 namespace App\Services;
 
-use App\Models\Coupons;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
-use App\Repositories\CouponsRepository;
+use App\Repositories\CouponRepository;
 
-class CouponsService
+class CouponService
 {
     protected $couponsRepository;
 
-    public function __construct(CouponsRepository $couponsRepository)
+    public function __construct(CouponRepository $couponsRepository)
     {
         $this->couponsRepository = $couponsRepository;
     }
@@ -18,10 +18,10 @@ class CouponsService
     public function showCoupons($id = null)
     {
         if ($id) {
-            $coupons = Coupons::find($id);
+            $coupons = Coupon::find($id);
             return response()->json(['coupons' => $coupons]);
         } else {
-            $coupons = Coupons::all();
+            $coupons = Coupon::all();
             return response()->json(['coupons' => $coupons]);
         }
     }
@@ -53,16 +53,16 @@ class CouponsService
 
     public function deleteCoupons(string $id)
     {
-        $coupons = Coupons::find($id);
+        $coupons = Coupon::find($id);
         $coupons->delete();
         return response()->json([
-            'message' => 'Coupons deleted successfully',
+            'message' => 'Coupon deleted successfully',
         ]);
     }
 
     public function updateCoupons(Request $request, string $id)
     {
-        $coupons = Coupons::find($id);
+        $coupons = Coupon::find($id);
 
         $validated = $request->validate([
             'code' =>'required|string|min:3|max:255|unique:coupons',

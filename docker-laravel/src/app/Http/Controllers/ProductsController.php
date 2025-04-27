@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ProductsService;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
-    protected $productsService;
+    protected $productService;
 
-    public function __construct(productsService $productsService)
+    public function __construct(ProductService $productService)
     {
-        $this->productsService = $productsService;
+        $this->productService = $productService;
+    }
+
+    public function createProducts(Request $request)
+    {
+        return $this->productService->createProducts($request);
     }
 
     public function uploadImage(Request $request, $product_id)

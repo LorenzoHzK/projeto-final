@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\CouponsService;
+use App\Services\CouponService;
 
 class CouponsController extends Controller
 {
     protected $couponsServices;
 
-    public function __construct(CouponsService $couponsServices)
+    public function __construct(CouponService $couponsServices)
     {
         $this->couponsServices = $couponsServices;
     }

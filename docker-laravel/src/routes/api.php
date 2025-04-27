@@ -34,13 +34,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/address/{id}', [AddressController::class, 'updateAddress']);
 
     // Route for Categories
-    Route::get('/categories/{id?}', [CategoriesController::class, 'showCategories'])->withoutMiddleware(['auth:sanctum']);
-    Route::post('/categories', [CategoriesController::class, 'createCategories']);
-    Route::delete('/categories/{id}', [CategoriesController::class, 'deleteCategory']);
-    Route::put('/categories/{id}', [CategoriesController::class, 'updateCategory']);
-    Route::get('/categories/user/{user_id}', [CategoriesController::class, 'categoriesByUser']);
+    Route::get('/category/{id?}', [CategoriesController::class, 'showCategories'])->withoutMiddleware(['auth:sanctum']);
+    Route::post('/category', [CategoriesController::class, 'createCategories']);
+    Route::delete('/category/{id}', [CategoriesController::class, 'deleteCategory']);
+    Route::put('/category/{id}', [CategoriesController::class, 'updateCategory']);
+    Route::get('/category/user/{user_id}', [CategoriesController::class, 'categoriesByUser']);
 
-    // Route to Coupons
+    // Route to Coupon
     Route::get('/coupon/{id?}', [CouponsController::class, 'showCoupons']);
     Route::post('/coupon', [CouponsController::class, 'createCoupons']);
     Route::delete('/coupon/{id}', [CouponsController::class, 'deleteCoupons']);
@@ -56,14 +56,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/image/product/{product_id}', [ProductsController::class, 'uploadImage']);
     Route::get('/image/product/{product_id}', [ProductsController::class, 'showImage']);
 
-    Route::get('/products/{id?}', [ProductsController::class, 'showProducts']);
-    Route::get('/products/category/{category_id}', [ProductsController::class, 'productsByCategory']);
-    Route::post('/products', [ProductsController::class, 'createProducts']);
-    Route::put('/products/{id?}', [ProductsController::class, 'updateProducts']);
-    Route::delete('/products/{id?}', [ProductsController::class, 'deleteProducts']);
-    Route::delete('/products/{id?}/stock', [ProductsController::class, 'updateStock']);
+    Route::get('/product/{id?}', [ProductsController::class, 'showProducts']);
+    Route::get('/product/category/{category_id}', [ProductsController::class, 'productsByCategory']);
+    Route::post('/product', [ProductsController::class, 'createProducts']);
+    Route::put('/product/{id?}', [ProductsController::class, 'updateProducts']);
+    Route::delete('/product/{id?}', [ProductsController::class, 'deleteProducts']);
+    Route::delete('/product/{id?}/stock', [ProductsController::class, 'updateStock']);
 
-// Route to Carts
+// Route to Cart
     Route::get('/cart/', [CartsController::class, 'showCart']);
     Route::post('/cart/', [CartsController::class, 'createCart']);
 

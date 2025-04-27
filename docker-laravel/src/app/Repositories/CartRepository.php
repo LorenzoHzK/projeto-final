@@ -2,34 +2,28 @@
 
 namespace App\Repositories;
 
-use App\Models\categories;
+use App\Models\Cart;
 
-class CategoriesRepository
+class CartRepository
 {
     public function all()
     {
-        return Categories::all();
+        return Cart::all();
     }
 
     public function find($id)
     {
-        return Categories::find($id);
+        return Cart::find($id);
     }
 
     public function create(array $data)
     {
-        return Categories::create($data);
+        return Cart::create($data);
     }
 
     public function update($id, array $data)
     {
         $category = $this->find($id);
         return $category->update($data);
-    }
-
-    public function deleteCategories($id)
-    {
-        $category = $this->find($id);
-        return $category->deleteCategories();
     }
 }

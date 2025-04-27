@@ -2,17 +2,15 @@
 
 namespace App\Services;
 
-use App\Models\categories;
+use App\Models\category;
 use Illuminate\Http\Request;
-use App\Repositories\CategoriesRepository;
+use App\Repositories\CategoryRepository;
 
-class CategoriesService
+class CategoryService
 {
-    protected $categoriesRepository;
 
-    public function __construct(CategoriesRepository $categoriesRepository)
+    public function __construct(protected CategoryRepository $categoriesRepository)
     {
-        $this->categoriesRepository = $categoriesRepository;
     }
 
     public function createCategories(Request $request)
@@ -41,18 +39,17 @@ class CategoriesService
     public function showCategories($id = null)
     {
         if ($id) {
-            $category = Categories::find($id);
+            $category = category::find($id);
             return response()->json(['category' => $category]);
         } else {
-            $categories = Categories::all();
-            return response()->json(['categories' => $categories]);
+            $categories = category::all();
+            return response()->json(['category' => $categories]);
         }
     }
 
     public function deleteCategory(string $id)
     {
-        $category = Categories::find($id);
-        $category->delete();
+        $category = $this->categoriesRepository->deleteCategories($id);
         return response()->json([
             'message' => 'Category deleted successfully',
         ]);
@@ -60,7 +57,7 @@ class CategoriesService
 
     public function updateCategory(Request $request, string $id)
     {
-        $category = Categories::find($id);
+        $category = category::find($id);
 
         $validated = $request->validate([
             'name' => 'required|string|min:3|max:255',
@@ -81,16 +78,16 @@ class CategoriesService
 
         if ($user->role != 'Admin') {
             return response()->json([
-                'message' => 'erro, you can`t verify the categories, you must be an admin'
+                'message' => 'erro, you can`t verify the category, you must be an admin'
             ], 401);
         };
 
         if ($id_user){
             $create_by = $id_user;
-            $category = Categories::find($create_by);
+            $category = category::find($create_by);
             return response()->json(['message' => $category]);
         } else {
-            return response()->json(['categories' => 'The user not exists addresses linked']);
+            return response()->json(['category' => 'The user not exists addresses linked']);
         }
     }
 }

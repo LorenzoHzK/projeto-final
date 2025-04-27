@@ -1,29 +1,29 @@
 <?php
 
 namespace app\Repositories;
-use App\Models\Carts;
-use App\Models\Orders;
+use App\Models\Cart;
+use App\Models\Order;
 
-class OrdersRepository
+class OrderRepository
 {
 
     public function all()
     {
-        return Orders::all();
+        return Order::all();
     }
 
     public function create($validatedData)
     {
-        return Orders::create($validatedData);
+        return Order::create($validatedData);
     }
 
     public function update($validatedData)
     {
-        return Orders::update($validatedData);
+        return Order::update($validatedData);
     }
 
     public function delete()
     {
-        return Orders::delete();
+        return Order::delete();
     }
 }

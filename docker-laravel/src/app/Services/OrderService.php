@@ -2,26 +2,25 @@
 
 namespace app\Services;
 use App\Models\CartItem;
-use App\Models\Carts;
-use App\Models\Orders;
-use App\Models\OrderItems;
-use App\Models\products;
-use App\Models\Coupons;
-use App\Repositories\OrdersRepository;
+use App\Models\Cart;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\product;
+use App\Models\Coupon;
+use App\Repositories\OrderRepository;
+use App\Models\User;
 
-class OrdersService
+class OrderService
 {
-    protected $ordersRepository;
-    public function __construct(OrdersRepository $ordersRepository)
+    public function __construct(protected OrderRepository $ordersRepository, protected  OrderItemService $orderItemService)
     {
-        $this->ordersRepository = $ordersRepository;
     }
 
     public function showOrders()
     {
         $user = auth()->user()->id;
 
-        if (!Orders::where('user_id', $user)->exists())
+        if (!Order::where('user_id', $user)->exists())
         {
             return response()->json([
                'message' => 'Dont have orders'
@@ -31,10 +30,10 @@ class OrdersService
         return $this->ordersRepository->all($user);
     }
 
-    public function createOrders($request, $orderItemService)
+    public function createOrders($request)
     {
         $user = auth()->user()->id;
-        $cart = Carts::where('user_id', $user)->first();
+        $cart = Cart::where('user_id', $user)->first();
         $cartItems = CartItem::where('cart_id', $cart->id)->get();
         $total['totalAmount'] = $cartItems->sum(
             function($item) {
@@ -62,7 +61,7 @@ class OrdersService
         // Toda a parte de stock precisa ser analisada com calma
         foreach ($cartItems as $cartItem)
         {
-            $product = products::find($cartItem->product_id);
+            $product = product::find($cartItem->product_id);
 
             if (!$product){
                 return response()->json([
@@ -83,7 +82,7 @@ class OrdersService
         }
 
         if (!empty($validatedData['cupon_id'])) {
-            $coupon = Coupons::find($validatedData['cupon_id']);
+            $coupon = Coupon::find($validatedData['cupon_id']);
 
             if ($coupon) {
                 $couponDiscount = $coupon->discount;
@@ -95,9 +94,10 @@ class OrdersService
 
         $Order = $this->ordersRepository->create($validatedData);
 
-        if ($validatedData)
-        $orderItemService->createFromCart($Order->id, $cartItems);
-        $cartItem->delete();
+        if ($validatedData) {
+            $this->orderItemService->createFromCart($Order->id, $cartItems);
+            $cartItem->delete();
+        }
 
         return response ()->json([
             'message' => 'Order created with success',
@@ -108,7 +108,7 @@ class OrdersService
     public function specificOrders($order_id)
     {
         $user = auth()->user()->id;
-        $order = Orders::where('id', $order_id)->where('user_id', $user)->first();
+        $order = Order::where('id', $order_id)->where('user_id', $user)->first();
 
         if (!$order) {
             return response()->json(['message' => 'Order not found.'], 404);
@@ -121,13 +121,13 @@ class OrdersService
     {
         $user = auth()->user()->role;
 
-        $order = Orders::find($order_id);
+        $order = Order::find($order_id);
         if (!$order)
         {
             return response()->json(['message' => 'Order not found.'], 404);
         }
 
-        if ($user != 'Moderator' && $user != 'Admin')
+        if ($user != User::MODERATOR && $user != 'Admin')
         {
             return response()->json([
                 'message' => 'Only moderators can update orders'
@@ -149,13 +149,13 @@ class OrdersService
     public function deleteOrders($order_id)
     {
         $user = auth()->user()->id;
-        $order = Orders::where('id', $order_id)->where('user_id', $user)->first();
+        $order = Order::where('id', $order_id)->where('user_id', $user)->first();
 
         if (!$order) {
             return response()->json(['message' => 'Order not found.'], 404);
         }
 
-        OrderItems::where('order_id', $order->id)->delete();
+        OrderItem::where('order_id', $order->id)->delete();
         $order->delete();
         return response()->json([
             'message' => 'Order deleted successfully',

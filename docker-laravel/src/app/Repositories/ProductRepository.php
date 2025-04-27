@@ -1,13 +1,13 @@
 <?php
 namespace App\Repositories;
 
-use App\Models\products;
+use App\Models\product;
 
-class ProductsRepository
+class ProductRepository
 {
     protected $model;
 
-    public function __construct(products $model)
+    public function __construct(product $model)
     {
         $this->model = $model;
     }

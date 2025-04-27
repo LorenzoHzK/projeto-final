@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\CartsService;
+use App\Services\CartService;
 
 class CartsController extends Controller
 {
-    protected CartsService $cartsService;
+    protected CartService $cartsService;
 
-    public function __construct(CartsService $cartsService)
+    public function __construct(CartService $cartsService)
     {
         $this->cartsService = $cartsService;
     }

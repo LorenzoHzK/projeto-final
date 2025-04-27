@@ -2,18 +2,18 @@
 
  namespace App\Services;
 
- use App\Models\categories;
- use App\Models\products;
- use App\Repositories\ProductsRepository;
+ use App\Models\category;
+ use App\Models\product;
+ use App\Repositories\ProductRepository;
  use Illuminate\Http\Request;
  use Illuminate\Support\Facades\Storage;
 
- class ProductsService
+ class ProductService
  {
 
      protected $productsRepository;
 
-     public function __construct(ProductsRepository $productsRepository)
+     public function __construct(ProductRepository $productsRepository)
      {
          $this->productsRepository = $productsRepository;
      }
@@ -33,13 +33,13 @@
              'price' => 'required'
          ]);
 
-         if (Products::where('name', $validatedData['name'])->exists()) {
+         if (product::where('name', $validatedData['name'])->exists()) {
              return response()->json([
                  'message' => 'Product with this name already exists'
              ], 409);
          }
 
-         if (!Categories::where('id', $validatedData['category_id'])->exists())
+         if (!category::where('id', $validatedData['category_id'])->exists())
          {
              return response()->json([
                  'message' => 'Category not found'
@@ -57,11 +57,11 @@
      public function showProducts($id = null)
      {
          if ($id) {
-             $product = Products::find($id);
+             $product = product::find($id);
              return response()->json(['Product' => $product]);
          }
          elseif ($id == null){
-             $product = Products::all();
+             $product = product::all();
              return response()->json(['Products' => $product]);
          }
          else
@@ -73,7 +73,7 @@
      public function productsByCategory($category_id)
      {
         if ($category_id){
-            $product = Products::find($category_id);
+            $product = product::find($category_id);
             return response()->json(['Product' => $product]);
         }
         else{
@@ -90,7 +90,7 @@
              ], 403);
          }
 
-         if (!$products = Products::findOrFail($id)) {
+         if (!$products = product::findOrFail($id)) {
              return response()->json([
                  'message' => 'Product not found'
              ], 404);
@@ -104,7 +104,7 @@
 
          return response()->json([
              "message" => "Product updated successfully",
-             "products" => $products
+             "product" => $products
          ]);
      }
 
@@ -117,7 +117,7 @@
              ], 403);
          }
 
-         $products = Products::find($id);
+         $products = product::find($id);
          $products->delete();
          return response()->json([
              'message' => 'Product deleted successfully',
@@ -132,7 +132,7 @@
             ], 403);
         }
 
-        if (!$products = Products::findOrFail($id)) {
+        if (!$products = product::findOrFail($id)) {
             return response()->json([
                 'message' => 'Product not found'
             ], 404);
@@ -144,7 +144,7 @@
 
         return response()->json([
             "message" => "Stock at this product updated successfully",
-            "products" => $products
+            "product" => $products
         ]);
     }
 
@@ -157,7 +157,7 @@
          }
 
          if ($request->hasFile('image_path')) {
-             $path = $request->file('image_path')->store('products', 'public');
+             $path = $request->file('image_path')->store('product', 'public');
 
              $product->image = $path;
              $product->save();

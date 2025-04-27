@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\CategoriesService;
+use App\Services\CategoryService;
 
 class CategoriesController extends Controller
 {
     protected $categoriesService;
 
-    public function __construct(CategoriesService $categoriesService)
+    public function __construct(CategoryService $categoriesService)
     {
         $this->categoriesService = $categoriesService;
     }

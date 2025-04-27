@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\OrderItems;
+use App\Models\OrderItem;
 use App\Repositories\OrderItemRepository;
 
 class OrderItemService
@@ -16,7 +16,7 @@ class OrderItemService
     public function createFromCart($orderId, $cartItems)
     {
         foreach ($cartItems as $item) {
-            OrderItems::create([
+            OrderItem::create([
                 'order_id'   => $orderId,
                 'product_id' => $item->product_id,
                 'unit_price' => $item->unit_price,

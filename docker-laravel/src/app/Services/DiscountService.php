@@ -4,7 +4,7 @@
 namespace App\Services;
 
 use App\Models\discount;
-use App\Models\products;
+use App\Models\product;
 use Illuminate\Http\Request;
 use App\Repositories\DiscountRepository;
 
@@ -34,7 +34,7 @@ class DiscountService
         ]);
 
         $validatedData['discount'] = $validatedData['discount'] / 100;
-        $product = products::find($validatedData['product_id']);
+        $product = product::find($validatedData['product_id']);
         if ($product)
         {
             $discountValue = $product->price * $validatedData['discount'];

@@ -2,15 +2,15 @@
 
 namespace App\Services;
 
-use App\Models\Carts;
-use App\Repositories\CartsRepository;
+use App\Models\Cart;
+use App\Repositories\CartRepository;
 use App\Models\CartItem;
 
-class CartsService
+class CartService
 {
     protected $cartsRepository;
 
-    public function __construct(CartsRepository $cartsRepository)
+    public function __construct(CartRepository $cartsRepository)
     {
         $this->cartsRepository = $cartsRepository;
     }
@@ -18,11 +18,11 @@ class CartsService
     public function showCart($id = null)
     {
         if ($id) {
-            $carts = Carts::find($id);
-            return response()->json(['Carts' => $carts]);
+            $carts = Cart::find($id);
+            return response()->json(['Cart' => $carts]);
         } else {
-            $carts = Carts::all();
-            return response()->json(['Carts' => $carts]);
+            $carts = Cart::all();
+            return response()->json(['Cart' => $carts]);
         }
     }
 
@@ -30,16 +30,16 @@ class CartsService
     {
         $validatedData['user_id'] = auth()->id();
 
-        if (Carts::where('user_id', $validatedData['user_id'])->exists()) {
+        if (Cart::where('user_id', $validatedData['user_id'])->exists()) {
             return response()->json([
-                'message' => 'Carts with this user already exists'
+                'message' => 'Cart with this user already exists'
             ], 409);
         }
 
         $carts = $this->cartsRepository->create($validatedData);
 
         return response()->json([
-            'message' => 'Carts create with success',
+            'message' => 'Cart create with success',
             'data' => $carts
         ], 201);
     }
@@ -47,7 +47,7 @@ class CartsService
     public function clearCartItem()
     {
         $user = auth()->user()->id;
-        $cart = Carts::where('user_id', $user)->first()->id;
+        $cart = Cart::where('user_id', $user)->first()->id;
         $data = CartItem::where('cart_id', $cart)->delete();
 
         return response()->json([

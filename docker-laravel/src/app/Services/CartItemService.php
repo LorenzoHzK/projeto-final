@@ -5,8 +5,8 @@ namespace app\Services;
 use App\Models\CartItem;
 use App\Repositories\CartItemRepository;
 use Illuminate\Http\Request;
-use App\Models\Carts;
-use App\Models\products;
+use App\Models\Cart;
+use App\Models\product;
 
 class CartItemService
 {
@@ -20,24 +20,24 @@ class CartItemService
     {
             $cartsItem = CartItem::all();
             return response()->json([
-                'Carts' => $cartsItem
+                'Cart' => $cartsItem
             ]);
     }
 
     public function createCartItem(Request $request)
     {
         $userId = auth()->id();
-        $cart = Carts::where('user_id', $userId)->first();
+        $cart = Cart::where('user_id', $userId)->first();
         if (!$cart) {
             return response()->json(['message' => 'Carrinho não encontrado.'], 404);
         }
 
         $validatedData = $request->validate([
-            'product_id' => 'required|exists:products,id',
+            'product_id' => 'required|exists:product,id',
             'quantity' => 'required|integer|min:1',
         ]);
 
-        $product = products::find($validatedData['product_id']);
+        $product = product::find($validatedData['product_id']);
 
             if($validatedData['quantity'] > $product->stock) {
                 return response()->json([
@@ -46,7 +46,7 @@ class CartItemService
                 ], 400);
             }
 
-        $product = products::findOrFail($validatedData['product_id']);
+        $product = product::findOrFail($validatedData['product_id']);
 
         $validatedData['unit_price'] = $product->price;
         $validatedData['cart_id'] = $cart->id;
@@ -62,7 +62,7 @@ class CartItemService
     public function updateCartItem(Request $request)
     {
         $validatedData = $request->validate([
-            'product_id' => 'required|exists:products,id',
+            'product_id' => 'required|exists:product,id',
             'quantity' => 'required|integer|min:1',
         ]);
 
@@ -78,7 +78,7 @@ class CartItemService
     public function deleteCartItem(Request $request)
     {
         $validatedData = $request->validate([
-            'product_id' => 'required|exists:products,id',
+            'product_id' => 'required|exists:product,id',
         ]);
 
         $productExists = CartItem::where('product_id', $validatedData['product_id'])->exists();

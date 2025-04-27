@@ -1,12 +1,12 @@
 <?php
 
 namespace app\Repositories;
-use App\Models\OrderItems;
+use App\Models\OrderItem;
 
 class OrderItemRepository
 {
     public function create($data)
     {
-        return OrderItems::create($data);
+        return OrderItem::create($data);
     }
 }

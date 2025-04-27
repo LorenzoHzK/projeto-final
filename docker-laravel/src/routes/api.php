@@ -2,13 +2,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AddressController;
-use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\CouponsController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\DiscountController;
-use App\Http\Controllers\ProductsController;
-use App\Http\Controllers\CartsController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
-use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\OrderController;
 
 // Authentication - Route to o login and register of user
 Route::post('/register', [UserController::class, 'register']);
@@ -22,10 +22,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //Route to User
     Route::prefix('user')->group(function () {
-    Route::get('/me', [UserController::class, 'info_user']);
-    Route::put('/me', [UserController::class, 'update_user']);
-    Route::delete('/me', [UserController::class, 'delete_user']);
-    Route::post('/create/moderator', [UserController::class, 'create_moderator']);
+    Route::get('/me', [UserController::class, 'infoUser']);
+    Route::put('/me', [UserController::class, 'updateUser']);
+    Route::delete('/me', [UserController::class, 'deleteUser']);
+    Route::post('/create/moderator', [UserController::class, 'createModerator']);
     });
 
     // Route to address
@@ -38,19 +38,19 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Route for Categories
     Route::prefix('category')->group(function () {
-    Route::get('/{id?}', [CategoriesController::class, 'showCategories'])->withoutMiddleware(['auth:sanctum']);
-    Route::post('/', [CategoriesController::class, 'createCategories']);
-    Route::delete('/{id}', [CategoriesController::class, 'deleteCategory']);
-    Route::put('/{id}', [CategoriesController::class, 'updateCategory']);
-    Route::get('/user/{user_id}', [CategoriesController::class, 'categoriesByUser']);
+    Route::get('/{id?}', [CategoryController::class, 'showCategories'])->withoutMiddleware(['auth:sanctum']);
+    Route::post('/', [CategoryController::class, 'createCategories']);
+    Route::delete('/{id}', [CategoryController::class, 'deleteCategory']);
+    Route::put('/{id}', [CategoryController::class, 'updateCategory']);
+    Route::get('/user/{user_id}', [CategoryController::class, 'categoriesByUser']);
     });
 
     // Route to Coupon
     Route::prefix('coupon')->group(function () {
-    Route::get('/{id?}', [CouponsController::class, 'showCoupons']);
-    Route::post('/', [CouponsController::class, 'createCoupons']);
-    Route::delete('/{id}', [CouponsController::class, 'deleteCoupons']);
-    Route::put('/{id}', [CouponsController::class, 'updateCoupons']);
+    Route::get('/{id?}', [CouponController::class, 'showCoupons']);
+    Route::post('/', [CouponController::class, 'createCoupons']);
+    Route::delete('/{id}', [CouponController::class, 'deleteCoupons']);
+    Route::put('/{id}', [CouponController::class, 'updateCoupons']);
     });
 
     // Route to Discounts
@@ -62,22 +62,22 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     //Route to Products
-    Route::post('/image/product/{product_id}', [ProductsController::class, 'uploadImage']);
-    Route::get('/image/product/{product_id}', [ProductsController::class, 'showImage']);
+    Route::post('/image/product/{product_id}', [ProductController::class, 'uploadImage']);
+    Route::get('/image/product/{product_id}', [ProductController::class, 'showImage']);
 
     Route::prefix('product')->group(function () {
-    Route::get('/{id?}', [ProductsController::class, 'showProducts']);
-    Route::get('/category/{category_id}', [ProductsController::class, 'productsByCategory']);
-    Route::post('/', [ProductsController::class, 'createProducts']);
-    Route::put('/{id?}', [ProductsController::class, 'updateProducts']);
-    Route::delete('/{id?}', [ProductsController::class, 'deleteProducts']);
-    Route::delete('/{id?}/stock', [ProductsController::class, 'updateStock']);
+    Route::get('/{id?}', [ProductController::class, 'showProducts']);
+    Route::get('/category/{category_id}', [ProductController::class, 'productsByCategory']);
+    Route::post('/', [ProductController::class, 'createProducts']);
+    Route::put('/{id?}', [ProductController::class, 'updateProducts']);
+    Route::delete('/{id?}', [ProductController::class, 'deleteProducts']);
+    Route::delete('/{id?}/stock', [ProductController::class, 'updateStock']);
     });
 
 // Route to Cart
     Route::prefix('cart')->group(function () {
-    Route::get('/', [CartsController::class, 'showCart']);
-    Route::post('/', [CartsController::class, 'createCart']);
+    Route::get('/', [CartController::class, 'showCart']);
+    Route::post('/', [CartController::class, 'createCart']);
 
 // Route to CartItem
     Route::get('/items', [CartItemController::class, 'cartItems']);
@@ -86,15 +86,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/items', [CartItemController::class, 'deleteCartItem']);
 
 // Route to clean the CartItem
-    Route::delete('/clear', [CartsController::class, 'clearCartItem']);
+    Route::delete('/clear', [CartController::class, 'clearCartItem']);
 });
 
 //Route to orders
     Route::prefix('order')->group(function () {
-    Route::get('/', [OrdersController::class, 'showOrders']);
-    Route::post('/', [OrdersController::class, 'createOrders']);
-    Route::get('/{order_id}', [OrdersController::class, 'specificOrders']);
-    Route::put('/{order_id}', [OrdersController::class, 'updateOrders']);
-    Route::delete('/{id}', [OrdersController::class, 'deleteOrders']);
+    Route::get('/', [OrderController::class, 'showOrders']);
+    Route::post('/', [OrderController::class, 'createOrders']);
+    Route::get('/{order_id}', [OrderController::class, 'specificOrders']);
+    Route::put('/{order_id}', [OrderController::class, 'updateOrders']);
+    Route::delete('/{id}', [OrderController::class, 'deleteOrders']);
     });
 });

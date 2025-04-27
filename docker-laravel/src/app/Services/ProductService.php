@@ -5,20 +5,18 @@
  use App\Models\category;
  use App\Models\product;
  use App\Repositories\ProductRepository;
- use Illuminate\Http\Request;
  use Illuminate\Support\Facades\Storage;
+ use Illuminate\Http\Request;
 
  class ProductService
  {
-
-     protected $productsRepository;
-
-     public function __construct(ProductRepository $productsRepository)
+     public function __construct(protected ProductRepository $productsRepository, Request $request)
      {
-         $this->productsRepository = $productsRepository;
+         $this->ProductRepository = $productsRepository;
+         $this->request = $request;
      }
 
-     public function createProducts(Request $request)
+     public function createProducts()
      {
          if (auth()->user()->role !== 'Admin' && auth()->user()->role !== 'Moderator') {
              return response()->json([
@@ -26,7 +24,7 @@
              ], 403);
          }
 
-         $validatedData = $request->validate([
+         $validatedData = $this->request->validate([
             'category_id' => 'required|integer',
              'name' => 'required|string|min:3|max:255',
              'stock' => 'required|integer',
@@ -46,7 +44,7 @@
              ]);
          }
 
-         $validatedData = $this->productsRepository->create($validatedData);
+         $validatedData = $this->ProductRepository->create($validatedData);
 
          return response()->json([
              'message' => 'Product created with success',
@@ -82,7 +80,7 @@
      }
 
 
-     public function updateProducts(Request $request, string $id)
+     public function updateProducts(string $id)
      {
          if (auth()->user()->role !== 'Admin' && auth()->user()->role !== 'Moderator') {
              return response()->json([
@@ -97,9 +95,9 @@
          }
 
          $products->update([
-             "category_id" => $request->category_id,
-             "name" => $request->name,
-             "price" => $request->price
+             "category_id" => $this->request->category_id,
+             "name" => $this->request->name,
+             "price" => $this->request->price
          ]);
 
          return response()->json([
@@ -124,7 +122,7 @@
          ]);
      }
 
-    public function updateStock(string $id, $request)
+    public function updateStock(string $id)
     {
         if (auth()->user()->role !== 'Admin' && auth()->user()->role !== 'Moderator') {
             return response()->json([
@@ -139,7 +137,7 @@
         }
 
         $products->update([
-            "stock" => $request->stock,
+            "stock" => $this->request->stock,
         ]);
 
         return response()->json([
@@ -148,16 +146,16 @@
         ]);
     }
 
-     public function uploadImage(Request $request, $product_id)
+     public function uploadImage($product_id)
      {
-         $product = $this->productsRepository->find($product_id);
+         $product = $this->ProductRepository->find($product_id);
 
          if (!$product) {
              return response()->json(['message' => 'Product not found'], 404);
          }
 
-         if ($request->hasFile('image_path')) {
-             $path = $request->file('image_path')->store('product', 'public');
+         if ($this->request->hasFile('image_path')) {
+             $path = $this->request->file('image_path')->store('product', 'public');
 
              $product->image = $path;
              $product->save();
@@ -174,7 +172,7 @@
 
      public function showImage($product_id)
      {
-         $product = $this->productsRepository->find($product_id);
+         $product = $this->ProductRepository->find($product_id);
 
          if (!$product) {
              return response()->json(['message' => 'Product not found'], 404);

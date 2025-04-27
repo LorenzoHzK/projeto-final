@@ -10,10 +10,10 @@ use App\Models\product;
 
 class CartItemService
 {
-    protected $cartItemRepository;
-    public function __construct(CartItemRepository $cartItemRepository)
+    public function __construct(protected CartItemRepository $cartItemRepository, Request $request)
     {
-        $this->cartItemRepository = $cartItemRepository;
+        $this->CartItemRepository = $cartItemRepository;
+        $this->request = $request;
     }
 
     public function showItems()
@@ -24,7 +24,7 @@ class CartItemService
             ]);
     }
 
-    public function createCartItem(Request $request)
+    public function createCartItem()
     {
         $userId = auth()->id();
         $cart = Cart::where('user_id', $userId)->first();
@@ -32,7 +32,7 @@ class CartItemService
             return response()->json(['message' => 'Carrinho não encontrado.'], 404);
         }
 
-        $validatedData = $request->validate([
+        $validatedData = $this->request->validate([
             'product_id' => 'required|exists:product,id',
             'quantity' => 'required|integer|min:1',
         ]);
@@ -59,9 +59,9 @@ class CartItemService
         ]);
     }
 
-    public function updateCartItem(Request $request)
+    public function updateCartItem()
     {
-        $validatedData = $request->validate([
+        $validatedData = $this->request->validate([
             'product_id' => 'required|exists:product,id',
             'quantity' => 'required|integer|min:1',
         ]);
@@ -75,9 +75,9 @@ class CartItemService
         ]);
     }
 
-    public function deleteCartItem(Request $request)
+    public function deleteCartItem()
     {
-        $validatedData = $request->validate([
+        $validatedData = $this->request->validate([
             'product_id' => 'required|exists:product,id',
         ]);
 

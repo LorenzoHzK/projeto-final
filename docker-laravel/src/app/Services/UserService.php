@@ -6,17 +6,16 @@ use Illuminate\Support\Facades\Auth;
 use App\Repositories\UserRepository;
 class UserService
 {
-    protected $userRepository;
-
-    public function __construct(UserRepository $userRepository)
+    public function __construct(protected UserRepository $userRepository, Request $request)
     {
-        $this->userRepository = $userRepository;
+        $this->UserRepository = $userRepository;
+        $this->request = $request;
     }
 
     /* registro do usuario */
-    public function registerUser(Request $request)
+    public function registerUser()
     {
-        $userData = $request ->validate([
+        $userData = $this->request ->validate([
             "email" => "required|email|unique:users,email",
             "name" => "required|string|min:3",
             "password" => "required|string|min:8"
@@ -25,17 +24,17 @@ class UserService
         return $this->userRepository->create($userData);
     }
 
-    /* login do usuario */
-    public function loginUser(Request $request)
+    /* login do user */
+    public function loginUser()
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $this->request->only('email', 'password');
 
         if (!Auth::attempt($credentials)) {
             return response()->json([
                 "message" => "Invalid email or password" ], 401);
             }
 
-        $user = $request->user();
+        $user = $this->request->user();
 
         $token = $user->createToken('auth_token',['*'], now()->addDays(10))->plainTextToken;
 
@@ -57,9 +56,9 @@ class UserService
     }
 
     // renovar o token
-    public function renewToken(Request $request)
+    public function renewToken()
     {
-        $user = $request->user();
+        $user = $this->request->user();
         if (!$user){
             return response()->json(["message"=> "User not authenticate"], 401);
         }
@@ -80,8 +79,8 @@ class UserService
     }
 
     // verificacao do token
-    public function verifyToken(Request $request){
-        $user = $request->user();
+    public function verifyToken(){
+        $user = $this->request->user();
         if (!$user){
             return response()->json(["message"=> "User not authenticate"], 401);
         }
@@ -91,14 +90,14 @@ class UserService
         ]);
     }
 
-    public function info_user()
+    public function infoUser()
     {
         return response()->json(auth()->user());
     }
 
-    public function update_user(Request $request)
+    public function UpdateUser()
     {
-        $validated = $request->validate([
+        $validated = $this->request->validate([
             'name' => 'sometimes|string|min:3',
             'email' => 'sometimes|string|min:3|email|unique:users,email',
             'password' => 'required|string|min:8'
@@ -109,7 +108,7 @@ class UserService
         return response()->json("Successful Updated, Your profile $user->name ");
     }
 
-    public function delete_user()
+    public function deleteUser()
     {
         $user = auth()->user();
         $user->delete();
@@ -117,11 +116,11 @@ class UserService
         return response()->json(["message"=> "User deleted successfully"]);
     }
 
-    public function create_moderator(Request $request)
+    public function createModerator()
     {
         $user = auth()->user();
 
-        $userData = $request ->validate([
+        $userData = $this->request ->validate([
             "name" => "required|string|min:3",
             "email" => "required|email|unique:users,email",
             "password" => "required|string|min:8"
@@ -134,9 +133,9 @@ class UserService
         };
 
         $userData = [
-            "name" => $request->name,
-            "email" => $request->email,
-            "password" => $request ->password,
+            "name" => $this->request->name,
+            "email" => $this->request->email,
+            "password" => $this->request ->password,
             "role" => "Moderator"
         ];
 

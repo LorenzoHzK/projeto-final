@@ -8,12 +8,13 @@ use App\Repositories\CategoryRepository;
 
 class CategoryService
 {
-
-    public function __construct(protected CategoryRepository $categoriesRepository)
+    public function __construct(protected CategoryRepository $categoriesRepository, Request $request)
     {
+        $this->CategoryRepository = $categoriesRepository;
+        $this->request = $request;
     }
 
-    public function createCategories(Request $request)
+    public function createCategories()
     {
         if (!auth()->user() || auth()->user()->role !== 'Admin') {
             return response()->json([
@@ -21,14 +22,14 @@ class CategoryService
             ], 403);
         }
 
-        $validatedData = $request->validate([
+        $validatedData = $this->request->validate([
             'name' => 'required|string|min:3|max:255',
             'description' => 'nullable|string|max:500'
         ]);
 
         $validatedData['created_by'] = auth()->id();
 
-        $category = $this->categoriesRepository->create($validatedData);
+        $category = $this->CategoryRepository->create($validatedData);
 
         return response()->json([
             'message' => 'Categoria criada com sucesso',
@@ -49,17 +50,17 @@ class CategoryService
 
     public function deleteCategory(string $id)
     {
-        $category = $this->categoriesRepository->deleteCategories($id);
+        $category = $this->CategoryRepository->deleteCategories($id);
         return response()->json([
             'message' => 'Category deleted successfully',
         ]);
     }
 
-    public function updateCategory(Request $request, string $id)
+    public function updateCategory(string $id)
     {
         $category = category::find($id);
 
-        $validated = $request->validate([
+        $validated = $this->request->validate([
             'name' => 'required|string|min:3|max:255',
             'description' => 'nullable|string|max:500'
         ]);

@@ -3,59 +3,56 @@
 namespace App\Http\Controllers;
 
 use App\Services\UserService;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    protected $userService;
-
-    public function __construct(UserService $userService)
+    public function __construct(protected UserService $userService)
     {
-        $this->userService = $userService;
+        $this->UserService = $userService;
     }
 
-    public function register (Request $request)
+    public function register ()
     {
-        return $this->userService->registerUser($request);
+        return $this->UserService->registerUser();
     }
 
-    public function login (Request $request)
+    public function login ()
     {
-        return $this->userService->loginUser($request);
+        return $this->UserService->loginUser();
     }
 
-    public function logout (Request $request)
+    public function logout ()
     {
-        return $this->userService->logout($request);
+        return $this->UserService->logout();
     }
 
-    public function renewToken(Request $request)
+    public function renewToken()
     {
-        return $this->userService->renewToken($request);
+        return $this->UserService->renewToken();
     }
 
-    public function verifyToken(Request $request)
+    public function verifyToken()
     {
-        return $this->userService->verifyToken($request);
+        return $this->UserService->verifyToken();
     }
 
-    public function info_user()
+    public function infoUser()
     {
-        return $this->userService->info_user();
+        return $this->UserService->infoUser();
     }
 
-    public function update_user(Request $request)
+    public function updateUser()
     {
-        return $this->userService->update_user($request);
+        return $this->UserService->updateUser();
     }
 
-    public function delete_user()
+    public function deleteUser()
     {
-        return $this->userService->delete_user();
+        return $this->UserService->deleteUser();
     }
 
-    public function create_moderator(Request $request)
+    public function createModerator()
     {
-        return $this->userService->create_moderator($request);
+        return $this->UserService->createModerator();
     }
 }

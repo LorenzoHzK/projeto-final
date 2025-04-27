@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->UnsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('category')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 
             $table->string('image')->nullable();
             $table->string('name');

@@ -2,35 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\DiscountService;
 
 class DiscountController extends Controller
 {
-    protected $discountService;
-
-    public function __construct(DiscountService $discountService)
+    public function __construct(protected DiscountService $discountService)
     {
-        $this->discountService = $discountService;
+        $this->DiscountService = $discountService;
     }
 
-    public function createDiscount(Request $request)
+    public function createDiscount()
     {
-        return $this->discountService->createDiscount($request);
+        return $this->DiscountService->createDiscount();
     }
 
     public function showDiscount($id = null)
     {
-        return $this->discountService->showDiscount($id);
+        return $this->DiscountService->showDiscount($id);
     }
 
     public function deleteDiscount(string $id)
     {
-        return $this->discountService->deleteDiscount($id);
+        return $this->DiscountService->deleteDiscount($id);
     }
 
-    public function updateDiscount(Request $request, String $id)
+    public function updateDiscount(String $id)
     {
-        return $this->discountService->updateDiscount($request, $id);
+        return $this->DiscountService->updateDiscount($id);
     }
 }

@@ -2,34 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\AddressService;
 
 class AddressController extends Controller
 {
-    protected $addressService;
-
-    public function __construct(AddressService $addressService)
+    public function __construct(protected AddressService $addressService)
     {
-        $this->addressService = $addressService;
+        $this->AddressService = $addressService;
     }
 
-    public function createAddress(Request $request)
+    public function createAddress()
     {
-        return $this->addressService->createAddress($request);
+        return $this->AddressService->createAddress();
     }
 
     public function showAddress($id = null)
     {
-        return $this->addressService->showAddress($id);
+        return $this->AddressService->showAddress($id);
     }
 
     public function deleteAddress(string $id){
-        return $this->addressService->deleteAddress($id);
+        return $this->AddressService->deleteAddress($id);
     }
 
-    public function updateAddress(Request $request, String $id)
+    public function updateAddress(String $id)
         {
-        return $this->addressService->updateAddress($request, $id);
+        return $this->AddressService->updateAddress($id);
         }
 }

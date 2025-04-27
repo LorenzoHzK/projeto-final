@@ -3,34 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Services\CartItemService;
-use Illuminate\Http\Request;
 
 class CartItemController extends Controller
 {
-    protected CartItemService $cartItemService;
-
-    public function __construct(CartItemService $cartItemService)
+    public function __construct(protected CartItemService $cartItemService)
     {
-        return $this->cartItemService = $cartItemService;
+        return $this->CartItemService = $cartItemService;
     }
 
     public function cartItems()
     {
-        return $this->cartItemService->showItems();
+        return $this->CartItemService->showItems();
     }
 
-    public function createCartItem(Request $request)
+    public function createCartItem()
     {
-        return $this->cartItemService->createCartItem($request);
+        return $this->CartItemService->createCartItem();
     }
 
-    public function updateCartItem(Request $request)
+    public function updateCartItem()
     {
-        return $this->cartItemService->updateCartItem($request);
+        return $this->CartItemService->updateCartItem();
     }
 
-    public function deleteCartItem(Request $request)
+    public function deleteCartItem()
     {
-        return $this->cartItemService->deleteCartItem($request);
+        return $this->CartItemService->deleteCartItem();
     }
 }

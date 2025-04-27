@@ -8,16 +8,15 @@ use App\Repositories\AddressRepository;
 
 class AddressService
 {
-    protected $addressRepository;
-
-    public function __construct(AddressRepository $addressRepository)
+    public function __construct(protected AddressRepository $addressRepository, Request $request)
     {
-        $this->addressRepository = $addressRepository;
+        $this->AddressRepository = $addressRepository;
+        $this->request = $request;
     }
 
-    public function createAddress(Request $request)
+    public function createAddress()
     {
-        $validatedData = $request->validate([
+        $validatedData = $this->request->validate([
             "street" => "required|string|min:3|max:255",
             "number" => "required|string|min:1|max:255",
             "zipcode" => "required|string|min:8|max:8",
@@ -28,7 +27,7 @@ class AddressService
 
         $validatedData['user_id'] = auth()->id();
 
-        $address = $this->addressRepository->create($validatedData);
+        $address = $this->AddressRepository->create($validatedData);
 
         return response()->json([
             "message" => "Address created successfully",
@@ -56,16 +55,16 @@ class AddressService
         ]);
     }
 
-    public function updateAddress(Request $request, string $id)
+    public function updateAddress(string $id)
     {
         $address = address::find($id);
         $address->update([
-            "street" => $request->street,
-            "number" => $request->number,
-            "zipcode" => $request->zipcode,
-            "city" => $request->city,
-            "state" => $request->state,
-            "country" => $request->country
+            "street" => $this->request->street,
+            "number" => $this->request->number,
+            "zipcode" => $this->request->zipcode,
+            "city" => $this->request->city,
+            "state" => $this->request->state,
+            "country" => $this->request->country
         ]);
 
         return response()->json([

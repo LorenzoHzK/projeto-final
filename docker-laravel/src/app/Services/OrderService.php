@@ -9,11 +9,16 @@ use App\Models\product;
 use App\Models\Coupon;
 use App\Repositories\OrderRepository;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class OrderService
 {
-    public function __construct(protected OrderRepository $ordersRepository, protected  OrderItemService $orderItemService)
+    public function __construct(protected OrderRepository $ordersRepository,
+                                OrderItemService $orderItemService, Request $request)
     {
+        $this->OrderRepository = $ordersRepository;
+        $this->OrderItemService = $orderItemService;
+        $this->Request = $request;
     }
 
     public function showOrders()
@@ -30,7 +35,7 @@ class OrderService
         return $this->ordersRepository->all($user);
     }
 
-    public function createOrders($request)
+    public function createOrders()
     {
         $user = auth()->user()->id;
         $cart = Cart::where('user_id', $user)->first();
@@ -41,7 +46,7 @@ class OrderService
             });
 
 
-        $validatedData = $request->validate([
+        $validatedData = $this->request->validate([
             'address_id' => 'required|int|exists:addresses,id',
             'cupon_id' => 'nullable|exists:coupons,id'
         ]);
@@ -117,7 +122,7 @@ class OrderService
         return response()->json(['order' => $order]);
     }
 
-    public function updateOrders($request, $order_id)
+    public function updateOrders($order_id)
     {
         $user = auth()->user()->role;
 
@@ -134,7 +139,7 @@ class OrderService
             ]);
         }
 
-        $validatedData = $request->validate([
+        $validatedData = $this->request->validate([
             'status' => 'required|string|in:Processing,Shipped,Completed,Canceled'
         ]);
 

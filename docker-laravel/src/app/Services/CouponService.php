@@ -8,11 +8,9 @@ use App\Repositories\CouponRepository;
 
 class CouponService
 {
-    protected $couponsRepository;
-
-    public function __construct(CouponRepository $couponsRepository)
+    public function __construct(protected CouponRepository $couponsRepository)
     {
-        $this->couponsRepository = $couponsRepository;
+        $this->CouponRepository = $couponsRepository;
     }
 
     public function showCoupons($id = null)

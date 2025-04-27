@@ -10,14 +10,13 @@ use App\Repositories\DiscountRepository;
 
 class DiscountService
 {
-    protected $discountRepository;
-
-    public function __construct(DiscountRepository $discountRepository)
+    public function __construct(protected DiscountRepository $discountRepository, Request $request)
     {
-        $this->discountRepository = $discountRepository;
+        $this->DiscountRepository = $discountRepository;
+        $this->request = $request;
     }
 
-    public function createDiscount(Request $request)
+    public function createDiscount()
     {
         if (auth()->user()->role !== 'Admin' && auth()->user()->role !== 'Moderator') {
             return response()->json([
@@ -25,7 +24,7 @@ class DiscountService
             ], 403);
         }
 
-        $validatedData = $request->validate([
+        $validatedData = $this->request->validate([
             'description' => 'required|string|min:3|max:255',
             'startDate' => 'required|date',
             'endDate' => 'required|date',
@@ -77,11 +76,11 @@ class DiscountService
         ]);
     }
 
-    public function updateDiscount(Request $request, string $id)
+    public function updateDiscount(string $id)
     {
         $discount = Discount::find($id);
 
-        $validated = $request->validate([
+        $validated = $this->request->validate([
             'description' => 'required|string|min:3|max:255',
             'startDate' => 'required|date',
             'endDate' => 'required|date',

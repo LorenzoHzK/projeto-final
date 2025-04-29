@@ -65,7 +65,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/image/product/{product_id}', [ProductController::class, 'showImage']);
 
     Route::prefix('product')->group(function () {
-    Route::get('/{id?}', [ProductController::class, 'showProducts']);
+    Route::get('/{id?}', [ProductController::class, 'showProducts'])->withoutMiddleware(['auth:sanctum']);
     Route::get('/category/{category_id}', [ProductController::class, 'productsByCategory']);
     Route::post('/', [ProductController::class, 'createProducts'])->middleware('role:Admin,Moderator');
     Route::put('/{id?}', [ProductController::class, 'updateProducts'])->middleware('role:Admin,Moderator');
@@ -75,7 +75,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //Route to Cart
     Route::prefix('cart')->group(function () {
-    Route::get('/', [CartController::class, 'showCart']);
+    Route::get('/', [CartController::class, 'showCart'])->middleware('auth:sanctum');
     Route::post('/', [CartController::class, 'createCart']);
 
     //Route to CartItem
@@ -92,7 +92,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('order')->group(function () {
     Route::get('/', [OrderController::class, 'showOrders']);
     Route::post('/', [OrderController::class, 'createOrders']);
-    Route::get('/{order_id}', [OrderController::class, 'specificOrders']);
+    Route::get('/{order_id}', [OrderController::class, 'specificOrders'])->middleware('role:Moderator');
     Route::put('/{order_id}', [OrderController::class, 'updateOrders']);
     Route::delete('/{id}', [OrderController::class, 'deleteOrders']);
     });

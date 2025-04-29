@@ -21,23 +21,30 @@ class OrderService
 
     public function showOrders()
     {
-        $user = auth()->user()->id;
+        $userId = auth()->id();
 
-        if (!Order::where('user_id', $user)->exists())
-        {
+        $orders = Order::where('user_id', $userId)->get();
+
+        if ($orders->isEmpty()) {
             return response()->json([
-               'message' => 'Dont have orders'
+                'message' => 'Dont have orders'
             ]);
         }
 
-        return $this->ordersRepository->all($user);
+        return response()->json($orders);
     }
+
 
     public function createOrders()
     {
         $user = auth()->user()->id;
         $cart = Cart::where('user_id', $user)->first();
         $cartItems = CartItem::where('cart_id', $cart->id)->get();
+        if ($cartItems->isEmpty()) {
+            return response()->json([
+                'message' => 'Cart is empty',
+            ]);
+        }
         $total['totalAmount'] = $cartItems->sum(
             function($item) {
                 return $item->unit_price * $item->quantity;
@@ -59,7 +66,6 @@ class OrderService
         $validatedData['totalAmount'] = $total['totalAmount'];
         $validatedData['user_id'] = $user;
         $validatedData['status'] = 'pending';
-
 
         foreach ($cartItems as $cartItem)
         {

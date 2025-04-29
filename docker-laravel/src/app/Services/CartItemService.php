@@ -7,6 +7,7 @@ use App\Repositories\CartItemRepository;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class CartItemService
 {
@@ -17,10 +18,21 @@ class CartItemService
 
     public function showItems()
     {
-            $cartsItem = CartItem::all();
+        $userId = auth()->id();
+
+        $cart = Cart::where('user_id', $userId)->first();
+
+        if (!$cart) {
             return response()->json([
-                'Cart' => $cartsItem
-            ]);
+                'message' => 'Cart not found.'
+            ], 404);
+        }
+
+        $cartItems = CartItem::where('cart_id', $cart->id)->get();
+
+        return response()->json([
+            'Cart' => $cartItems
+        ]);
     }
 
     public function createCartItem()

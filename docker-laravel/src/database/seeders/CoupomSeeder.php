@@ -11,9 +11,9 @@ class CoupomSeeder extends Seeder
     public function run(): void
     {
         Coupon::insert([
-        ['code' => 'AUTO10', 'startDate' => '2025-01-01', 'endDate' => '2025-12-31', 'discount' => 10.00],
-        ['code' => 'PECA15', 'startDate' => '2025-05-01', 'endDate' => '2025-08-31', 'discount' => 15.00],
-        ['code' => 'OFICINA5', 'startDate' => '2025-03-01', 'endDate' => '2025-07-01', 'discount' => 5.00],
+        ['code' => 'AUTO10', 'startDate' => '2025-01-01', 'endDate' => '2025-12-31', 'discount' => 00.10],
+        ['code' => 'PECA15', 'startDate' => '2025-05-01', 'endDate' => '2025-08-31', 'discount' => 00.15],
+        ['code' => 'OFICINA5', 'startDate' => '2025-03-01', 'endDate' => '2025-07-01', 'discount' => 00.05],
         ]);
     }
 }

@@ -11,9 +11,9 @@ class CategoryController extends Controller
         $this->CategoryService = $categoriesService;
     }
 
-    public function createCategories()
+    public function createCategory()
     {
-        return $this->CategoryService->createCategories();
+        return $this->CategoryService->createCategory();
     }
 
     public function showCategories(string $id = null)

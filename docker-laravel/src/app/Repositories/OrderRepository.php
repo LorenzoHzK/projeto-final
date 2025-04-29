@@ -7,9 +7,9 @@ use App\Models\Order;
 class OrderRepository
 {
 
-    public function all()
+    public function all($user)
     {
-        return Order::all();
+        return Order::all($user);
     }
 
     public function create($validatedData)

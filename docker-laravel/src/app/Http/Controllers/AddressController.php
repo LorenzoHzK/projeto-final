@@ -7,26 +7,24 @@ use App\Services\AddressService;
 class AddressController extends Controller
 {
     public function __construct(protected AddressService $addressService)
-    {
-        $this->AddressService = $addressService;
-    }
+    {}
 
     public function createAddress()
     {
-        return $this->AddressService->createAddress();
+        return $this->addressService->createAddress();
     }
 
     public function showAddress($id = null)
     {
-        return $this->AddressService->showAddress($id);
+        return $this->addressService->showAddress($id);
     }
 
     public function deleteAddress(string $id){
-        return $this->AddressService->deleteAddress($id);
+        return $this->addressService->deleteAddress($id);
     }
 
     public function updateAddress(String $id)
         {
-        return $this->AddressService->updateAddress($id);
+        return $this->addressService->updateAddress($id);
         }
 }

@@ -2,49 +2,44 @@
 
  namespace App\Services;
 
- use App\Models\category;
- use App\Models\product;
+ use App\Models\Category;
+ use App\Models\Product;
+ use App\Models\User;
  use App\Repositories\ProductRepository;
  use Illuminate\Support\Facades\Storage;
  use Illuminate\Http\Request;
 
  class ProductService
  {
-     public function __construct(protected ProductRepository $productsRepository, Request $request)
-     {
-         $this->ProductRepository = $productsRepository;
-         $this->request = $request;
-     }
+     public function __construct(
+         protected ProductRepository $productRepository,
+         protected Request $request)
+     {}
 
      public function createProducts()
      {
-         if (auth()->user()->role !== 'Admin' && auth()->user()->role !== 'Moderator') {
-             return response()->json([
-                 'message' => 'Just Moderators can create a product'
-             ], 403);
-         }
-
          $validatedData = $this->request->validate([
             'category_id' => 'required|integer',
              'name' => 'required|string|min:3|max:255',
-             'stock' => 'required|integer',
-             'price' => 'required'
+             'stock' => 'required|integer|min:0',
+             'price' => 'required|min:0',
+             'original' => 'required|boolean',
+             'weight' => 'required|min:1|max:255',
          ]);
 
-         if (product::where('name', $validatedData['name'])->exists()) {
+         if (Product::where('name', $validatedData['name'])->exists()) {
              return response()->json([
                  'message' => 'Product with this name already exists'
              ], 409);
          }
 
-         if (!category::where('id', $validatedData['category_id'])->exists())
-         {
+         if (!Category::where('id', $validatedData['category_id'])->exists()) {
              return response()->json([
-                 'message' => 'Category not found'
-             ]);
+                 "message" => "Category not found"
+             ], 404);
          }
 
-         $validatedData = $this->ProductRepository->create($validatedData);
+         $this->productRepository->create($validatedData);
 
          return response()->json([
              'message' => 'Product created with success',
@@ -55,68 +50,72 @@
      public function showProducts($id = null)
      {
          if ($id) {
-             $product = product::find($id);
+             $product = $this->productRepository->find($id);
+             if(!$product) {
+             return response()->json(['message' => 'product not found']);
+             }
              return response()->json(['Product' => $product]);
          }
-         elseif ($id == null){
-             $product = product::all();
-             return response()->json(['Products' => $product]);
-         }
-         else
-         {
-             return response()->json(['message' => 'Product not found']);
-         }
+
+         $products = Product::all();
+         return response()->json(['Product' => $products]);
      }
 
      public function productsByCategory($category_id)
      {
-        if ($category_id){
-            $product = product::find($category_id);
-            return response()->json(['Product' => $product]);
+         $products = Product::where('category_id', $category_id)->get();
+
+        if ($products->isEmpty()){
+            return response()->json(['message' => 'Product not found by category']);
         }
-        else{
-            return response()->json(['message' => 'Product not found']);
-        }
+
+         return response()->json(['Product' => $products]);
      }
 
 
      public function updateProducts(string $id)
      {
-         if (auth()->user()->role !== 'Admin' && auth()->user()->role !== 'Moderator') {
+         $product = Product::find($id);
+         if (!$product) {
              return response()->json([
-                 'message' => 'Just Moderators can update the stock of a product'
-             ], 403);
-         }
-
-         if (!$products = product::findOrFail($id)) {
-             return response()->json([
-                 'message' => 'Product not found'
+                 "message" => "Product not found"
              ], 404);
          }
 
-         $products->update([
-             "category_id" => $this->request->category_id,
-             "name" => $this->request->name,
-             "price" => $this->request->price
-         ]);
+        $validatedData = $this->request->validate([
+            'category_id' => 'required|integer',
+            'name' => 'required|string|min:3|max:255',
+            'price' => 'required|min:0',
+            'original' => 'required|boolean',
+            'weight' => 'required|min:1|max:255',
+        ]);
+
+         if (!Category::where('id', $validatedData['category_id'])->exists()) {
+             return response()->json([
+                 "message" => "Category not found"
+             ], 404);
+         }
+
+         $this->productRepository->update($id, $validatedData);
 
          return response()->json([
              "message" => "Product updated successfully",
-             "product" => $products
+             "product" => $validatedData
          ]);
      }
 
 
      public function deleteProducts($id)
      {
-         if (auth()->user()->role !== 'Admin' && auth()->user()->role !== 'Moderator') {
+         $product = Product::find($id);
+         if (!$product) {
              return response()->json([
-                 'message' => 'Just Moderators can update the stock of a product'
-             ], 403);
+                 "message" => "Product not found"
+             ], 404);
          }
 
-         $products = product::find($id);
-         $products->delete();
+         $this->productRepository->delete($id);
+
          return response()->json([
              'message' => 'Product deleted successfully',
          ]);
@@ -124,37 +123,37 @@
 
     public function updateStock(string $id)
     {
-        if (auth()->user()->role !== 'Admin' && auth()->user()->role !== 'Moderator') {
+        $product = Product::find($id);
+        if (!$product) {
             return response()->json([
-                'message' => 'Just Moderators can update the stock of a product'
-            ], 403);
-        }
-
-        if (!$products = product::findOrFail($id)) {
-            return response()->json([
-                'message' => 'Product not found'
+                "message" => "Product not found"
             ], 404);
         }
 
-        $products->update([
-            "stock" => $this->request->stock,
+        $validatedData = $this->request->validate([
+            'stock' => 'required|integer|min:0',
         ]);
+
+        $this->productRepository->update($id, $validatedData);
 
         return response()->json([
             "message" => "Stock at this product updated successfully",
-            "product" => $products
         ]);
     }
 
      public function uploadImage($product_id)
      {
-         $product = $this->ProductRepository->find($product_id);
+         $product = $this->productRepository->find($product_id);
 
          if (!$product) {
              return response()->json(['message' => 'Product not found'], 404);
          }
 
          if ($this->request->hasFile('image_path')) {
+             if ($product->image && Storage::disk('public')->exists($product->image)) {
+                 Storage::disk('public')->delete($product->image);
+             }
+
              $path = $this->request->file('image_path')->store('product', 'public');
 
              $product->image = $path;
@@ -172,7 +171,7 @@
 
      public function showImage($product_id)
      {
-         $product = $this->ProductRepository->find($product_id);
+         $product = $this->productRepository->find($product_id);
 
          if (!$product) {
              return response()->json(['message' => 'Product not found'], 404);

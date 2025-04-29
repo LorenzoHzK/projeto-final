@@ -7,48 +7,46 @@ use App\Services\ProductService;
 class ProductController extends Controller
 {
     public function __construct(protected ProductService $productService)
-    {
-        $this->ProductService = $productService;
-    }
+    {}
 
     public function showProducts($id = null)
     {
-        return $this->ProductService->showProducts($id);
+        return $this->productService->showProducts($id);
     }
 
     public function createProducts()
     {
-        return $this->ProductService->createProducts();
+        return $this->productService->createProducts();
     }
 
     public function uploadImage($product_id)
     {
-        return $this->ProductService->uploadImage($product_id);
+        return $this->productService->uploadImage($product_id);
     }
 
     public function showImage($product_id)
     {
-        return $this->ProductService->showImage($product_id);
+        return $this->productService->showImage($product_id);
     }
 
 
     public function productsByCategory($category_id = null)
     {
-        return $this->ProductService->productsByCategory($category_id);
+        return $this->productService->productsByCategory($category_id);
     }
 
     public function updateProducts(String $id)
     {
-        return $this->ProductService->updateProducts($id);
+        return $this->productService->updateProducts($id);
     }
 
     public function deleteProducts(string $id)
     {
-        return $this->ProductService->deleteProducts($id);
+        return $this->productService->deleteProducts($id);
     }
 
     public function updateStock(string $id)
     {
-        return $this->ProductService->updateStock($id);
+        return $this->productService->updateStock($id);
     }
 }

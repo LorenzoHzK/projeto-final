@@ -5,21 +5,19 @@ use App\Models\CartItem;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\product;
+use App\Models\Product;
 use App\Models\Coupon;
 use App\Repositories\OrderRepository;
-use App\Models\User;
+use App\Services\OrderItemService;
 use Illuminate\Http\Request;
 
 class OrderService
 {
-    public function __construct(protected OrderRepository $ordersRepository,
-                                OrderItemService $orderItemService, Request $request)
-    {
-        $this->OrderRepository = $ordersRepository;
-        $this->OrderItemService = $orderItemService;
-        $this->Request = $request;
-    }
+    public function __construct(
+        protected OrderRepository $ordersRepository,
+        protected OrderItemService $orderItemService,
+        protected Request $request)
+    {}
 
     public function showOrders()
     {
@@ -45,11 +43,11 @@ class OrderService
                 return $item->unit_price * $item->quantity;
             });
 
-
         $validatedData = $this->request->validate([
             'address_id' => 'required|int|exists:addresses,id',
             'cupon_id' => 'nullable|exists:coupons,id'
         ]);
+
 
         if (!$validatedData['address_id']) {
             return response()->json([
@@ -63,10 +61,9 @@ class OrderService
         $validatedData['status'] = 'pending';
 
 
-        // Toda a parte de stock precisa ser analisada com calma
         foreach ($cartItems as $cartItem)
         {
-            $product = product::find($cartItem->product_id);
+            $product = Product::find($cartItem->product_id);
 
             if (!$product){
                 return response()->json([
@@ -98,10 +95,9 @@ class OrderService
         }
 
         $Order = $this->ordersRepository->create($validatedData);
-
         if ($validatedData) {
             $this->orderItemService->createFromCart($Order->id, $cartItems);
-            $cartItem->delete();
+            CartItem::where('cart_id', $cart->id)->delete();
         }
 
         return response ()->json([
@@ -124,19 +120,10 @@ class OrderService
 
     public function updateOrders($order_id)
     {
-        $user = auth()->user()->role;
-
         $order = Order::find($order_id);
         if (!$order)
         {
             return response()->json(['message' => 'Order not found.'], 404);
-        }
-
-        if ($user != User::MODERATOR && $user != 'Admin')
-        {
-            return response()->json([
-                'message' => 'Only moderators can update orders'
-            ]);
         }
 
         $validatedData = $this->request->validate([

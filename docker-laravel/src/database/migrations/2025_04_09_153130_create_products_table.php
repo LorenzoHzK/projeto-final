@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('name');
             $table->integer('stock');
             $table->decimal('price', 10,2);
+            $table->boolean('original')->default(true);
+            $table->decimal('weight', 10,2)->nullable();
 
             $table->timestamps();
         });

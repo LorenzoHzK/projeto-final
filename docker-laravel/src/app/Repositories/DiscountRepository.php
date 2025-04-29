@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\discount;
+use App\Models\Discount;
 
 class DiscountRepository
 {
@@ -28,10 +28,10 @@ class DiscountRepository
         return $this->model->create($data);
     }
 
-    public function update($id, array $data)
+    public function update($id, array $validatedData)
     {
         $coupon = $this->find($id);
-        return $coupon->update($data);
+        return $coupon->update($validatedData);
     }
 
     public function delete($id)

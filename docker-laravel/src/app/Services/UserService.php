@@ -1,18 +1,20 @@
 <?php
 namespace App\Services;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\UserRepository;
 class UserService
 {
-    public function __construct(protected UserRepository $userRepository, Request $request)
+    public function __construct(
+        protected UserRepository $userRepository,
+        protected Request $request,
+        protected CartService $CartService)
     {
-        $this->UserRepository = $userRepository;
-        $this->request = $request;
     }
 
-    /* registro do usuario */
+    /* register user */
     public function registerUser()
     {
         $userData = $this->request ->validate([
@@ -20,6 +22,7 @@ class UserService
             "name" => "required|string|min:3",
             "password" => "required|string|min:8"
         ]);
+        $userData['role'] = 'Client';
 
         return $this->userRepository->create($userData);
     }
@@ -37,6 +40,7 @@ class UserService
         $user = $this->request->user();
 
         $token = $user->createToken('auth_token',['*'], now()->addDays(10))->plainTextToken;
+        $this->CartService->createCart();
 
         return response()->json([
             "message" => "Login successful",
@@ -55,7 +59,6 @@ class UserService
         ]);
     }
 
-    // renovar o token
     public function renewToken()
     {
         $user = $this->request->user();
@@ -78,7 +81,6 @@ class UserService
         ]);
     }
 
-    // verificacao do token
     public function verifyToken(){
         $user = $this->request->user();
         if (!$user){
@@ -95,17 +97,19 @@ class UserService
         return response()->json(auth()->user());
     }
 
-    public function UpdateUser()
+    public function updateUser()
     {
-        $validated = $this->request->validate([
+        $user = auth()->user()->id;
+
+        $userData = $this->request->validate([
             'name' => 'sometimes|string|min:3',
             'email' => 'sometimes|string|min:3|email|unique:users,email',
             'password' => 'required|string|min:8'
         ]);
 
-        $user = auth()->user();
-        $user->update($validated);
-        return response()->json("Successful Updated, Your profile $user->name ");
+        $user = $this->userRepository->update($user, $userData);
+        return response()->json
+        (['message' => 'Successful Updated, Your profile']);
     }
 
     public function deleteUser()
@@ -118,26 +122,12 @@ class UserService
 
     public function createModerator()
     {
-        $user = auth()->user();
-
-        $userData = $this->request ->validate([
+        $userData = $this->request->validate([
             "name" => "required|string|min:3",
             "email" => "required|email|unique:users,email",
-            "password" => "required|string|min:8"
+            "password" => "required|string|min:8",
         ]);
-
-        if ($user->role != 'Admin') {
-            return response()->json([
-                'message' => 'erro, you can`t create a moderator, to create a moderator you must be an admin'
-            ], 401);
-        };
-
-        $userData = [
-            "name" => $this->request->name,
-            "email" => $this->request->email,
-            "password" => $this->request ->password,
-            "role" => "Moderator"
-        ];
+        $userData['role'] = 'Moderator';
 
         $this->userRepository->create($userData);
 

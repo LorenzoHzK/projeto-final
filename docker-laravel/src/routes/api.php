@@ -10,12 +10,11 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\OrderController;
 
-// Authentication - Route to o login and register of user
+//Authentication - Route to o login and register of user
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-
     Route::post('/logout', [UserController::class, 'logout']);
     Route::post('/renew/token', [UserController::class, 'renewToken']);
     Route::get('/verify/token', [UserController::class, 'verifyToken']);
@@ -25,10 +24,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me', [UserController::class, 'infoUser']);
     Route::put('/me', [UserController::class, 'updateUser']);
     Route::delete('/me', [UserController::class, 'deleteUser']);
-    Route::post('/create/moderator', [UserController::class, 'createModerator']);
+    Route::post('/create/moderator', [UserController::class, 'createModerator'])->middleware('role:Admin');
     });
 
-    // Route to address
+    //Route to address
     Route::prefix('address')->group(function () {
     Route::get('/{id?}', [AddressController::class, 'showAddress']);
     Route::post('/', [AddressController::class, 'createAddress']);
@@ -36,29 +35,29 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/{id}', [AddressController::class, 'updateAddress']);
     });
 
-    // Route for Categories
+    //Route for Categories
     Route::prefix('category')->group(function () {
     Route::get('/{id?}', [CategoryController::class, 'showCategories'])->withoutMiddleware(['auth:sanctum']);
-    Route::post('/', [CategoryController::class, 'createCategories']);
-    Route::delete('/{id}', [CategoryController::class, 'deleteCategory']);
-    Route::put('/{id}', [CategoryController::class, 'updateCategory']);
-    Route::get('/user/{user_id}', [CategoryController::class, 'categoriesByUser']);
+    Route::post('/', [CategoryController::class, 'createCategory'])->middleware('role:Admin');
+    Route::delete('/{id}', [CategoryController::class, 'deleteCategory'])->middleware('role:Admin');
+    Route::put('/{id}', [CategoryController::class, 'updateCategory'])->middleware('role:Admin');
+    Route::get('/user/{user_id}', [CategoryController::class, 'categoriesByUser'])->middleware('role:Admin');
     });
 
-    // Route to Coupon
+    //Route to Coupon
     Route::prefix('coupon')->group(function () {
-    Route::get('/{id?}', [CouponController::class, 'showCoupons']);
-    Route::post('/', [CouponController::class, 'createCoupons']);
-    Route::delete('/{id}', [CouponController::class, 'deleteCoupons']);
-    Route::put('/{id}', [CouponController::class, 'updateCoupons']);
+    Route::get('/{id?}', [CouponController::class, 'showCoupons'])->middleware('role:Admin');
+    Route::post('/', [CouponController::class, 'createCoupons'])->middleware('role:Admin');
+    Route::delete('/{id}', [CouponController::class, 'deleteCoupons'])->middleware('role:Admin');
+    Route::put('/{id}', [CouponController::class, 'updateCoupons'])->middleware('role:Admin');
     });
 
-    // Route to Discounts
+    //Route to Discounts
     Route::prefix('discount')->group(function () {
-    Route::get('/{id?}', [DiscountController::class, 'showDiscount']);
-    Route::post('/', [DiscountController::class, 'createDiscount']);
-    Route::delete('/{id}', [DiscountController::class, 'deleteDiscount']);
-    Route::put('/{id}', [DiscountController::class, 'updateDiscount']);
+    Route::get('/{id?}', [DiscountController::class, 'showDiscount'])->middleware('role:Admin');
+    Route::post('/', [DiscountController::class, 'createDiscount'])->middleware('role:Admin');
+    Route::delete('/{id}', [DiscountController::class, 'deleteDiscount'])->middleware('role:Admin');
+    Route::put('/{id}', [DiscountController::class, 'updateDiscount'])->middleware('role:Admin');
     });
 
     //Route to Products
@@ -68,28 +67,28 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('product')->group(function () {
     Route::get('/{id?}', [ProductController::class, 'showProducts']);
     Route::get('/category/{category_id}', [ProductController::class, 'productsByCategory']);
-    Route::post('/', [ProductController::class, 'createProducts']);
-    Route::put('/{id?}', [ProductController::class, 'updateProducts']);
-    Route::delete('/{id?}', [ProductController::class, 'deleteProducts']);
-    Route::delete('/{id?}/stock', [ProductController::class, 'updateStock']);
+    Route::post('/', [ProductController::class, 'createProducts'])->middleware('role:Admin,Moderator');
+    Route::put('/{id?}', [ProductController::class, 'updateProducts'])->middleware('role:Admin,Moderator');
+    Route::delete('/{id?}', [ProductController::class, 'deleteProducts'])->middleware('role:Admin,Moderator');
+    Route::put('/{id?}/stock', [ProductController::class, 'updateStock'])->middleware('role:Admin,Moderator');
     });
 
-// Route to Cart
+    //Route to Cart
     Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'showCart']);
     Route::post('/', [CartController::class, 'createCart']);
 
-// Route to CartItem
-    Route::get('/items', [CartItemController::class, 'cartItems']);
+    //Route to CartItem
+    Route::get('/items', [CartItemController::class, 'ShowItems']);
     Route::put('/items', [CartItemController::class, 'updateCartItem']);
     Route::post('/items', [CartItemController::class, 'createCartItem']);
     Route::delete('/items', [CartItemController::class, 'deleteCartItem']);
 
-// Route to clean the CartItem
+    //Route to clean the CartItem
     Route::delete('/clear', [CartController::class, 'clearCartItem']);
 });
 
-//Route to orders
+    //Route to orders
     Route::prefix('order')->group(function () {
     Route::get('/', [OrderController::class, 'showOrders']);
     Route::post('/', [OrderController::class, 'createOrders']);

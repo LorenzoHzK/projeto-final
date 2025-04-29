@@ -7,27 +7,25 @@ use App\Services\CartItemService;
 class CartItemController extends Controller
 {
     public function __construct(protected CartItemService $cartItemService)
-    {
-        return $this->CartItemService = $cartItemService;
-    }
+    {}
 
-    public function cartItems()
+    public function ShowItems()
     {
-        return $this->CartItemService->showItems();
+        return $this->cartItemService->showItems();
     }
 
     public function createCartItem()
     {
-        return $this->CartItemService->createCartItem();
+        return $this->cartItemService->createCartItem();
     }
 
     public function updateCartItem()
     {
-        return $this->CartItemService->updateCartItem();
+        return $this->cartItemService->updateCartItem();
     }
 
     public function deleteCartItem()
     {
-        return $this->CartItemService->deleteCartItem();
+        return $this->cartItemService->deleteCartItem();
     }
 }

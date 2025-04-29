@@ -7,12 +7,8 @@ use App\Repositories\OrderItemRepository;
 
 class OrderItemService
 {
-    protected $orderItemRepository;
-
-    public function __construct(OrderItemRepository $orderItemRepository)
-    {
-        $this->orderItemRepository = $orderItemRepository;
-    }
+    public function __construct(protected OrderItemRepository $orderItemRepository)
+    {}
     public function createFromCart($orderId, $cartItems)
     {
         foreach ($cartItems as $item) {

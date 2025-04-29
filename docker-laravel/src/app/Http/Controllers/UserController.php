@@ -7,52 +7,50 @@ use App\Services\UserService;
 class UserController extends Controller
 {
     public function __construct(protected UserService $userService)
-    {
-        $this->UserService = $userService;
-    }
+    {}
 
     public function register ()
     {
-        return $this->UserService->registerUser();
+        return $this->userService->registerUser();
     }
 
     public function login ()
     {
-        return $this->UserService->loginUser();
+        return $this->userService->loginUser();
     }
 
     public function logout ()
     {
-        return $this->UserService->logout();
+        return $this->userService->logout();
     }
 
     public function renewToken()
     {
-        return $this->UserService->renewToken();
+        return $this->userService->renewToken();
     }
 
     public function verifyToken()
     {
-        return $this->UserService->verifyToken();
+        return $this->userService->verifyToken();
     }
 
     public function infoUser()
     {
-        return $this->UserService->infoUser();
+        return $this->userService->infoUser();
     }
 
     public function updateUser()
     {
-        return $this->UserService->updateUser();
+        return $this->userService->updateUser();
     }
 
     public function deleteUser()
     {
-        return $this->UserService->deleteUser();
+        return $this->userService->deleteUser();
     }
 
     public function createModerator()
     {
-        return $this->UserService->createModerator();
+        return $this->userService->createModerator();
     }
 }

@@ -2,37 +2,39 @@
 
 namespace App\Services;
 
-use App\Models\category;
+use App\Models\Category;
+use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Http\Request;
 use App\Repositories\CategoryRepository;
+use function PHPUnit\Framework\isEmpty;
+use function PHPUnit\Framework\isNull;
 
 class CategoryService
 {
-    public function __construct(protected CategoryRepository $categoriesRepository, Request $request)
-    {
-        $this->CategoryRepository = $categoriesRepository;
-        $this->request = $request;
-    }
+    public function __construct(
+        protected CategoryRepository $categoryRepository,
+        protected Request $request)
+    {}
 
-    public function createCategories()
+    public function createCategory()
     {
-        if (!auth()->user() || auth()->user()->role !== 'Admin') {
-            return response()->json([
-                'message' => 'Apenas administradores podem criar categorias'
-            ], 403);
-        }
-
         $validatedData = $this->request->validate([
             'name' => 'required|string|min:3|max:255',
             'description' => 'nullable|string|max:500'
         ]);
 
+        if (Category::where('name', $validatedData['name'])->exists()) {
+            return response()->json([
+                'message' => 'Category with this name already exists'
+            ]);
+        }
+
         $validatedData['created_by'] = auth()->id();
 
-        $category = $this->CategoryRepository->create($validatedData);
+        $category = $this->categoryRepository->create($validatedData);
 
         return response()->json([
-            'message' => 'Categoria criada com sucesso',
+            'message' => 'Category created with success',
             'data' => $category
         ], 201);
     }
@@ -40,32 +42,39 @@ class CategoryService
     public function showCategories($id = null)
     {
         if ($id) {
-            $category = category::find($id);
+            $category = $this->categoryRepository->find($id);
             return response()->json(['category' => $category]);
         } else {
-            $categories = category::all();
+            $categories = $this->categoryRepository->all();
             return response()->json(['category' => $categories]);
         }
     }
 
     public function deleteCategory(string $id)
     {
-        $category = $this->CategoryRepository->deleteCategories($id);
+        if(!Category::where('id', $id)->exists()){
+            return response()->json(['message' => 'Category not found',]);
+        }
+
+        $deleted = $this->categoryRepository->delete($id);
+
+        if(!$deleted){
+            return response()->json(['message' => 'Category not found',]);
+        }
+
         return response()->json([
-            'message' => 'Category deleted successfully',
+            'message' => 'Category deleted successfully' . $deleted,
         ]);
     }
 
     public function updateCategory(string $id)
     {
-        $category = category::find($id);
-
         $validated = $this->request->validate([
-            'name' => 'required|string|min:3|max:255',
+            'name' => 'required|string|min:3|max:255|unique:categories,name,',
             'description' => 'nullable|string|max:500'
         ]);
 
-        $category->update($validated);
+        $category = $this->categoryRepository->update($id, $validated);
 
         return response()->json([
             "message" => "Category updated successfully",
@@ -75,20 +84,16 @@ class CategoryService
 
     public function categoriesByUser($id_user = null)
     {
-        $user = auth()->user();
+        if(!$id_user){
+          return response()->json(['message' => 'User id Required']);
+        }
 
-        if ($user->role != 'Admin') {
-            return response()->json([
-                'message' => 'erro, you can`t verify the category, you must be an admin'
-            ], 401);
-        };
+        $categories = $this->categoryRepository->getByUserId($id_user);
 
-        if ($id_user){
-            $create_by = $id_user;
-            $category = category::find($create_by);
-            return response()->json(['message' => $category]);
+        if (!$categories->isEmpty()){
+            return response()->json(['message' => $categories]);
         } else {
-            return response()->json(['category' => 'The user not exists addresses linked']);
+            return response()->json(['category' => 'The user not exists the category lined']);
         }
     }
 }

@@ -2,33 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\CouponService;
 
 class CouponController extends Controller
 {
     public function __construct(protected CouponService $couponsService)
-    {
-        $this->CouponService = $couponsService;
-    }
+    {}
 
     public function showCoupons(string $id = null)
     {
-        return $this->CouponService->showCoupons($id);
+        return $this->couponsService->showCoupons($id);
     }
 
-    public function createCoupons(Request $request)
+    public function createCoupons()
     {
-        return $this->CouponService->createCoupons($request);
+        return $this->couponsService->createCoupons();
     }
 
-    public function updateCoupons(Request $request, string $id)
+    public function updateCoupons(string $id)
     {
-        return $this->CouponService->updateCoupons($request, $id);
+        return $this->couponsService->updateCoupons($id);
     }
 
     public function deleteCoupons(string $id)
     {
-        return $this->CouponService->deleteCoupons($id);
+        return $this->couponsService->deleteCoupons($id);
     }
 }

@@ -7,27 +7,25 @@ use App\Services\DiscountService;
 class DiscountController extends Controller
 {
     public function __construct(protected DiscountService $discountService)
-    {
-        $this->DiscountService = $discountService;
-    }
+    {}
 
     public function createDiscount()
     {
-        return $this->DiscountService->createDiscount();
+        return $this->discountService->createDiscount();
     }
 
     public function showDiscount($id = null)
     {
-        return $this->DiscountService->showDiscount($id);
+        return $this->discountService->showDiscount($id);
     }
 
     public function deleteDiscount(string $id)
     {
-        return $this->DiscountService->deleteDiscount($id);
+        return $this->discountService->deleteDiscount($id);
     }
 
     public function updateDiscount(String $id)
     {
-        return $this->DiscountService->updateDiscount($id);
+        return $this->discountService->updateDiscount($id);
     }
 }

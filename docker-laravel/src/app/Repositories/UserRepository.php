@@ -18,15 +18,15 @@ class UserRepository
         return $this->model->find($id);
     }
 
-    public function update(int $id, array $data): ?User
+    public function update(int $user, $userData): ?User
     {
-        $user = $this->find($id);
+        $user = $this->find($user);
 
         if (!$user) {
             return null;
         }
 
-        $user->update($data);
+        $user->update($userData);
         return $user->fresh();
     }
 

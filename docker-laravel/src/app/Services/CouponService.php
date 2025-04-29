@@ -3,36 +3,31 @@
 namespace App\Services;
 
 use App\Models\Coupon;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Repositories\CouponRepository;
 
 class CouponService
 {
-    public function __construct(protected CouponRepository $couponsRepository)
-    {
-        $this->CouponRepository = $couponsRepository;
-    }
+    public function __construct(
+        protected CouponRepository $couponRepository,
+        protected Request $request)
+    {}
 
     public function showCoupons($id = null)
     {
         if ($id) {
-            $coupons = Coupon::find($id);
+            $coupons = $this->couponRepository->find($id);
             return response()->json(['coupons' => $coupons]);
         } else {
-            $coupons = Coupon::all();
+            $coupons = $this->couponRepository->all();
             return response()->json(['coupons' => $coupons]);
         }
     }
 
-    public function createCoupons(Request $request)
+    public function createCoupons()
     {
-        if (!auth()->user() || auth()->user()->role !== 'Admin') {
-            return response()->json([
-                'message' => 'Just Admins can create coupons'
-            ], 403);
-        }
-
-        $validatedData = $request->validate([
+        $validatedData = $this->request->validate([
             'code' =>'required|string|min:3|max:255|unique:coupons',
             'startDate' => 'required|date',
             'endDate' => 'required|date',
@@ -41,7 +36,7 @@ class CouponService
 
         $validatedData['discount'] = $validatedData['discount'] / 100;
 
-        $coupons = $this->couponsRepository->create($validatedData);
+        $coupons = $this->couponRepository->create($validatedData);
 
         return response()->json([
             'message' => 'Discount created with success',
@@ -51,25 +46,33 @@ class CouponService
 
     public function deleteCoupons(string $id)
     {
-        $coupons = Coupon::find($id);
-        $coupons->delete();
+        if ($id == null) {
+            return response()->json([
+                'message' => 'Coupon not found',
+            ]);
+        }
+
+        $this->couponRepository->delete($id);
+
         return response()->json([
             'message' => 'Coupon deleted successfully',
         ]);
     }
 
-    public function updateCoupons(Request $request, string $id)
+    public function updateCoupons(string $id)
     {
-        $coupons = Coupon::find($id);
+        $coupons = $this->couponRepository->find($id);
 
-        $validated = $request->validate([
+        $validated = $this->request->validate([
             'code' =>'required|string|min:3|max:255|unique:coupons',
             'startDate' => 'required|date',
             'endDate' => 'required|date',
             'discount' => 'sometimes|required'
         ]);
 
-        $coupons->update($validated);
+        $validated['discount'] = $validated['discount'] / 100;
+
+        $this->couponRepository->update($id, $validated);
 
         return response()->json([
             "message" => "Coupon updated successfully",

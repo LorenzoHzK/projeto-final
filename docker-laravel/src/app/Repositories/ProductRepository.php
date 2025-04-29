@@ -1,20 +1,16 @@
 <?php
 namespace App\Repositories;
 
-use App\Models\product;
+use App\Models\Product;
 
 class ProductRepository
 {
-    protected $model;
+    public function __construct(protected Product $model)
+    {}
 
-    public function __construct(product $model)
+    public function create($validatedData)
     {
-        $this->model = $model;
-    }
-
-    public function create(array $data)
-    {
-        return $this->model->create($data);
+        return $this->model->create($validatedData);
     }
 
     public function find($id)
@@ -22,9 +18,21 @@ class ProductRepository
         return $this->model->find($id);
     }
 
+    public function update($id, array $validatedData)
+    {
+        $product = $this->find($id);
+        return $product->update($validatedData);
+    }
+
     public function save($product)
     {
         return $product->save();
+    }
+
+    public function delete($id)
+    {
+        $product = $this->find($id);
+        return $product->delete();
     }
 }
 

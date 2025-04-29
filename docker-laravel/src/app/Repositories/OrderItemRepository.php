@@ -9,4 +9,9 @@ class OrderItemRepository
     {
         return OrderItem::create($data);
     }
+
+    public function delete()
+    {
+        return OrderItem::delete();
+    }
 }

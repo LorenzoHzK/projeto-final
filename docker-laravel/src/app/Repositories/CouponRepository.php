@@ -6,12 +6,7 @@ use App\Models\Coupon;
 
 class CouponRepository
 {
-    protected $model;
-
-    public function __construct(Coupon $model)
-    {
-        $this->model = $model;
-    }
+    public function __construct(protected Coupon $model) {}
 
     public function all()
     {
@@ -20,7 +15,7 @@ class CouponRepository
 
     public function find($id)
     {
-        return $this->model->find($id);
+        return $this->model->findOrFail($id);
     }
 
     public function create(array $data)
@@ -28,10 +23,10 @@ class CouponRepository
         return $this->model->create($data);
     }
 
-    public function update($id, array $data)
+    public function update($id, $validated)
     {
-        $coupon = $this->find($id);
-        return $coupon->update($data);
+        $coupon = $this->model->find($id);
+        return $coupon->update($validated);
     }
 
     public function delete($id)

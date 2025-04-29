@@ -2,34 +2,44 @@
 
 namespace App\Repositories;
 
-use App\Models\category;
+use App\Models\Category;
 
 class CategoryRepository
 {
+    public function __construct(protected Category $model)
+    {
+        $this->Category = $model;
+    }
+
     public function all()
     {
-        return category::all();
+        return $this->Category->all();
     }
 
     public function find($id)
     {
-        return category::find($id);
+        return $this->Category->find($id);
     }
 
     public function create(array $data)
     {
-        return category::create($data);
+        return $this->Category->create($data);
     }
 
-    public function update($id, array $data)
+    public function update($id, array $validated)
     {
-        $category = $this->find($id);
-        return $category->update($data);
+        $category = $this->Category->find($id);
+        return $category->update($validated);
     }
 
-    public function deleteCategories($id)
+    public function delete($id)
     {
-        $category = $this->find($id);
+        $category = $this->Category->find($id);
         return $category->delete();
+    }
+
+    public function getByUserId($id_user)
+    {
+        return $this->Category->where('created_by', $id_user)->get();
     }
 }

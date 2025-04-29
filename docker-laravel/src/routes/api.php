@@ -93,7 +93,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/', [OrderController::class, 'showOrders']);
     Route::post('/', [OrderController::class, 'createOrders']);
     Route::get('/{order_id}', [OrderController::class, 'specificOrders'])->middleware('role:Moderator');
-    Route::put('/{order_id}', [OrderController::class, 'updateOrders']);
+    Route::put('/{order_id}', [OrderController::class, 'updateOrders'])->middleware('role:Moderator');
     Route::delete('/{id}', [OrderController::class, 'deleteOrders']);
     });
 });

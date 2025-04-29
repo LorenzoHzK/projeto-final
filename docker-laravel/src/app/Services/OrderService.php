@@ -127,8 +127,7 @@ class OrderService
     public function updateOrders($order_id)
     {
         $order = Order::find($order_id);
-        if (!$order)
-        {
+        if (!$order) {
             return response()->json(['message' => 'Order not found.'], 404);
         }
 

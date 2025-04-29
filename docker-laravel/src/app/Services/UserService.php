@@ -115,11 +115,12 @@ class UserService
     public function deleteUser()
     {
         $user = auth()->user();
-        $user->delete();
+        $user->carts()->delete();
         $user->tokens()->delete();
-        return response()->json(["message"=> "User deleted successfully"]);
-    }
+        $user->delete();
 
+        return response()->json(["message" => "User deleted successfully"]);
+    }
     public function createModerator()
     {
         $userData = $this->request->validate([

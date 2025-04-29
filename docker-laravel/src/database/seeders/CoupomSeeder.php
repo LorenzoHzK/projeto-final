@@ -10,8 +10,10 @@ class CoupomSeeder extends Seeder
 {
     public function run(): void
     {
-        Coupon::create(['code' => 'BEMVINDO10', 'discount_percent' => 10]);
-        Coupon::create(['code' => 'FRETEGRATIS', 'discount_percent' => 15]);
-        Coupon::create(['code' => 'YUMMU20', 'discount_percent' => 20]);
+        Coupon::insert([
+        ['code' => 'AUTO10', 'startDate' => '2025-01-01', 'endDate' => '2025-12-31', 'discount' => 10.00],
+        ['code' => 'PECA15', 'startDate' => '2025-05-01', 'endDate' => '2025-08-31', 'discount' => 15.00],
+        ['code' => 'OFICINA5', 'startDate' => '2025-03-01', 'endDate' => '2025-07-01', 'discount' => 5.00],
+        ]);
     }
 }

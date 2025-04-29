@@ -23,30 +23,26 @@ class DiscountService
             'startDate' => 'required|date',
             'endDate' => 'required|date',
             'discount' => 'required|numeric|min:0|max:100',
-            'product_id' => 'required|integer',
+            'product_id' => 'required|integer|exists:products,id',
         ]);
 
         if ($validatedData['endDate'] <= $validatedData['startDate']) {
-            return response()->json(['message' => 'The end date must be greater than the start date']);
+            return response()->json(['message' => 'End date must be greater than a start date'], 400);
         }
 
-        $validatedData['discount'] = $validatedData['discount'] / 100;
+        $product = Product::find($validatedData['product_id']);
 
-        if(!$product = Product::find($validatedData['product_id'])){
-            return response()->json(['message' => 'Product not found']);
-        }
+        $discountValue = $product->price * ($validatedData['discount'] / 100);
+        $newPrice = $product->price - $discountValue;
 
-            $discountValue = $product->price * $validatedData['discount'];
-            $product->update([
-                'price' => $product->price - $discountValue,
-            ]);
+        $product->update(['price' => $newPrice]);
 
-        $discount = $this->discountRepository->create($validatedData);
+        $discount = Discount::create($validatedData);
 
         return response()->json([
-            'message' => 'discount created with success',
-            'data' => $discount
-        ], 201);
+            'message' => 'Discount applied successfully',
+            'New Price' => $newPrice
+        ]);
     }
 
     public function showDiscount($id = null)

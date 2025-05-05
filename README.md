@@ -1,14 +1,20 @@
 # 🚗 AutoParts Marketplace - Backend API
 
-![Laravel](https://img.shields.io/badge/Laravel-10.x-FF2D20.svg?logo=laravel)
-![PHP](https://img.shields.io/badge/PHP-8.x-777BB4.svg?logo=php)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1.svg?logo=mysql)
-![Docker](https://img.shields.io/badge/Docker-✓-2496ED.svg?logo=docker)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Laravel](https://img.shields.io/badge/Laravel-10-FF2D20?logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-✓-2496ED?logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
-A robust backend API for an auto parts e-commerce platform built with Laravel 10.
+## 🌐 Bilingual README
+- [English Version](#-english-version)
+- [Versão em Português](#-versão-em-português)
 
-## 📌 Table of Contents
+---
+
+## 🇬🇧 English Version
+
+### 📌 Table of Contents
 - [Key Features](#-key-features)
 - [Technology Stack](#-technology-stack)
 - [Getting Started](#-getting-started)
@@ -19,26 +25,26 @@ A robust backend API for an auto parts e-commerce platform built with Laravel 10
 - [License](#-license)
 - [About the Developer](#-about-the-developer)
 
-## ✨ Key Features
+### ✨ Key Features
 
-### 🔐 Authentication System
+#### 🔐 Authentication System
 - JWT Token-based authentication
 - User registration and login
 - Password reset functionality
 
-### 🚘 Auto Parts Management
+#### 🚘 Auto Parts Management
 - Specialized fields for vehicle compatibility
 - Product categorization by vehicle type
 - Inventory tracking system
 
-### 🛒 E-Commerce Features
+#### 🛒 E-Commerce Features
 - Shopping cart persistence
 - Order processing workflow
 - Transaction history
 
-## 🛠 Technology Stack
+### 🛠 Technology Stack
 
-### Core Technologies
+#### Core Technologies
 | Component       | Technology |
 |----------------|------------|
 | Backend        | Laravel 10 |
@@ -46,19 +52,19 @@ A robust backend API for an auto parts e-commerce platform built with Laravel 10
 | Cache          | Redis      |
 | Containerization | Docker   |
 
-### Development Tools
+#### Development Tools
 - **API Testing**: Insomnia/Postman
 - **Testing Framework**: PHPUnit
 - **CI/CD**: GitHub Actions
 
-## 🚀 Getting Started
+### 🚀 Getting Started
 
-### Prerequisites
+#### Prerequisites
 - Docker 20.10+
 - Docker Compose 2.0+
 - Git
 
-### Installation Guide
+#### Installation Guide
 ```bash
 # Clone the repository
 git clone https://github.com/LorenzoHzK/autoparts-marketplace.git
@@ -71,10 +77,11 @@ docker-compose up -d --build
 # Enter the container
 docker exec -it autoparts-app bash
 
-# Install dependencies and setup
+# Install dependencies
 composer install
 php artisan key:generate
 php artisan migrate --seed
+
 Access the API at: http://localhost:8080
 
 📚 API Endpoints
@@ -92,11 +99,11 @@ POST	/api/cart	Add item to cart
 POST	/api/orders	Create new order
 Note: Complete API documentation available in API_DOCS.md
 
+
 🧪 Testing
 Run the test suite with:
-
-bash
 php artisan test
+
 Test Coverage Includes:
 
 Authentication tests
@@ -106,6 +113,7 @@ Product CRUD operations
 Order processing workflow
 
 Cart management tests
+
 
 📂 Project Architecture
 autoparts-marketplace/
@@ -128,5 +136,5 @@ autoparts-marketplace/
 Matheus Lorenzo Siqueira
 Full Stack Developer specializing in Laravel applications.
 
-![image](https://github.com/user-attachments/assets/39710c94-3220-423b-ab50-44a8e5bd50d0)
-![image](https://github.com/user-attachments/assets/3f70f38e-cbae-4196-b4ae-ea6f3f85ebca)
+![image](https://github.com/user-attachments/assets/b1146715-33f1-4afe-8208-164496e3d902)
+![image](https://github.com/user-attachments/assets/35d510a9-a857-4e99-9799-2ed8811c4f6f)

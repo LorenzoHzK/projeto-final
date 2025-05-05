@@ -84,7 +84,10 @@ php artisan migrate --seed
 
 Access the API at: http://localhost:8080
 ```
-📚 API Endpoints
+
+
+**📚 API Endpoints**
+```bash
 Authentication
 Method	Endpoint	Description
 POST	/api/auth/register	Register new account
@@ -97,21 +100,15 @@ Orders
 Method	Endpoint	Description
 POST	/api/cart	Add item to cart
 POST	/api/orders	Create new order
-Note: Complete API documentation available in API_DOCS.md
-
+```
 
 🧪 Testing
 Run the test suite with:
 php artisan test
-
 Test Coverage Includes:
-
 Authentication tests
-
 Product CRUD operations
-
 Order processing workflow
-
 Cart management tests
 
 
@@ -133,9 +130,129 @@ autoparts-marketplace/
 ├── tests/                 # Feature & unit tests
 └── docker/                # Docker configuration
 ```
-👨‍💻 About the Developer
-Matheus Lorenzo Siqueira
-Full Stack Developer specializing in Laravel applications.
+### 👨‍💻 Autor
+**Matheus Lorenzo Siqueira**  
+Desenvolvedor Full Stack especializado em Laravel.
 
 [![GitHub](https://img.shields.io/badge/GitHub-@LorenzoHzK-181717?logo=github)](https://github.com/LorenzoHzK)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-0A66C2?logo=linkedin)](https://www.linkedin.com/in/matheuslorenzodeveloper)
+
+
+
+
+🇧🇷 Versão em Português
+📋 Sumário
+Funcionalidades
+Tecnologias
+Instalação
+Rotas da API
+Testes
+Estrutura
+Contribuição
+Licença
+Autor
+
+✨ Funcionalidades
+👤 Gestão de Usuários
+Autenticação via JWT
+
+Cadastro e login de usuários
+
+Recuperação de senha
+
+🛠 Catálogo de Autopeças
+Campos específicos para compatibilidade veicular
+
+Categorização por marca/modelo
+
+Controle de estoque integrado
+
+🛒 Sistema de Vendas
+Carrinho de compras persistente
+
+Fluxo completo de pedidos
+
+Histórico de transações
+
+🛠 Tecnologias Utilizadas
+Principais
+Componente	Tecnologia
+Backend	Laravel 10
+Banco de Dados	MySQL 8.0
+Cache	Redis
+Containerização	Docker
+Ferramentas
+Testes de API: Insomnia/Postman
+
+Testes Unitários: PHPUnit
+
+CI/CD: GitHub Actions
+
+🚀 Instalação
+Pré-requisitos
+Docker 20.10+
+
+Docker Compose 2.0+
+
+Git
+
+```
+# Clonar repositório
+git clone https://github.com/LorenzoHzK/autoparts-marketplace.git
+cd autoparts-marketplace
+
+# Configurar ambiente
+cp .env.example .env
+docker-compose up -d --build
+
+# Acessar container
+docker exec -it autoparts-app bash
+
+# Instalar dependências
+composer install
+php artisan key:generate
+php artisan migrate --seed
+Acesse a API em: http://localhost:8080
+```
+### 📡 Rotas da API
+**Autenticação**
+```
+Método	Rota	Descrição
+POST	/api/auth/register	Registrar usuário
+POST	/api/auth/login	Login de usuário
+Produtos
+Método	Rota	Descrição
+GET	/api/products	Listar autopeças
+POST	/api/products	Cadastrar nova peça
+Pedidos
+Método	Rota	Descrição
+POST	/api/cart	Adicionar ao carrinho
+POST	/api/orders	Finalizar pedido
+```
+### 🧪 Testes
+Execute os testes com:
+php artisan test
+Cobertura de Testes:
+Autenticação de usuários
+Operações CRUD de produtos
+Fluxo de processamento de pedidos
+Testes de gerenciamento de carrinho
+
+### 📂 Estrutura do Projeto
+```bash
+autoparts-marketplace/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/   # Controladores
+│   │   └── Middleware/    # Middlewares
+│   ├── Models/            # Modelos Eloquent
+│   └── Services/          # Lógica de negócio
+├── config/                # Configurações
+├── database/
+│   ├── factories/         # Factories
+│   ├── migrations/        # Migrations
+│   └── seeders/           # Seeders
+├── routes/                # Rotas
+├── tests/                 # Testes
+└── docker/                # Config Docker
+```

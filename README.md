@@ -1,3 +1,4 @@
+
 # 🚗 AutoParts Marketplace - Backend API
 
 ![Laravel](https://img.shields.io/badge/Laravel-10-FF2D20?logo=laravel&logoColor=white)
@@ -45,6 +46,7 @@
 ### 🛠 Technology Stack
 
 #### Core Technologies
+
 | Component       | Technology |
 |----------------|------------|
 | Backend        | Laravel 10 |
@@ -85,34 +87,42 @@ php artisan migrate --seed
 Access the API at: http://localhost:8080
 ```
 
+### 📡 API Endpoints
 
-**📚 API Endpoints**
-```bash
-Authentication
-Method	Endpoint	Description
-POST	/api/auth/register	Register new account
-POST	/api/auth/login	User authentication
-Products
-Method	Endpoint	Description
-GET	/api/products	List all auto parts
-POST	/api/products	Create new product entry
-Orders
-Method	Endpoint	Description
-POST	/api/cart	Add item to cart
-POST	/api/orders	Create new order
+#### Authentication
+```http
+POST /api/auth/register    - Register new account
+POST /api/auth/login       - User authentication
 ```
 
-🧪 Testing
+#### Products
+```http
+GET  /api/products         - List all auto parts
+POST /api/products         - Create new product entry
+```
+
+#### Orders
+```http
+POST /api/cart             - Add item to cart
+POST /api/orders           - Create new order
+```
+
+### 🧪 Testing
+
 Run the test suite with:
+
+```bash
 php artisan test
-Test Coverage Includes:
-Authentication tests
-Product CRUD operations
-Order processing workflow
-Cart management tests
+```
 
+**Test Coverage Includes:**
+- Authentication tests
+- Product CRUD operations
+- Order processing workflow
+- Cart management tests
 
-**📂 Project Architecture**
+### 📂 Project Architecture
+
 ```bash
 autoparts-marketplace/
 ├── app/
@@ -130,73 +140,69 @@ autoparts-marketplace/
 ├── tests/                 # Feature & unit tests
 └── docker/                # Docker configuration
 ```
-### 👨‍💻 Autor
-**Matheus Lorenzo Siqueira**  
-Desenvolvedor Full Stack especializado em Laravel.
 
-[![GitHub](https://img.shields.io/badge/GitHub-@LorenzoHzK-181717?logo=github)](https://github.com/LorenzoHzK)
+### 👨‍💻 About the Developer
+
+**Matheus Lorenzo Siqueira**  
+Full Stack Developer specialized in Laravel.
+
+[![GitHub](https://img.shields.io/badge/GitHub-@LorenzoHzK-181717?logo=github)](https://github.com/LorenzoHzK)  
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-0A66C2?logo=linkedin)](https://www.linkedin.com/in/matheuslorenzodeveloper)
 
+---
 
+## 🇧🇷 Versão em Português
 
+### 📋 Sumário
+- [Funcionalidades](#-funcionalidades)
+- [Tecnologias](#-tecnologias-utilizadas)
+- [Instalação](#-instalação)
+- [Rotas da API](#-rotas-da-api)
+- [Testes](#-testes)
+- [Estrutura](#-estrutura-do-projeto)
+- [Contribuição](#como-contribuir)
+- [Licença](#-licença)
+- [Autor](#autor)
 
-🇧🇷 Versão em Português
-📋 Sumário
-Funcionalidades
-Tecnologias
-Instalação
-Rotas da API
-Testes
-Estrutura
-Contribuição
-Licença
-Autor
+### ✨ Funcionalidades
 
-✨ Funcionalidades
-👤 Gestão de Usuários
-Autenticação via JWT
+#### 👤 Gestão de Usuários
+- Autenticação via JWT
+- Cadastro e login de usuários
+- Recuperação de senha
 
-Cadastro e login de usuários
+#### 🛠 Catálogo de Autopeças
+- Campos específicos para compatibilidade veicular
+- Categorização por marca/modelo
+- Controle de estoque integrado
 
-Recuperação de senha
+#### 🛒 Sistema de Vendas
+- Carrinho de compras persistente
+- Fluxo completo de pedidos
+- Histórico de transações
 
-🛠 Catálogo de Autopeças
-Campos específicos para compatibilidade veicular
+### 🛠 Tecnologias Utilizadas
 
-Categorização por marca/modelo
+| Componente     | Tecnologia |
+|----------------|------------|
+| Backend        | Laravel 10 |
+| Banco de Dados | MySQL 8.0  |
+| Cache          | Redis      |
+| Containerização| Docker     |
 
-Controle de estoque integrado
+#### Ferramentas
+- Testes de API: Insomnia/Postman
+- Testes Unitários: PHPUnit
+- CI/CD: GitHub Actions
 
-🛒 Sistema de Vendas
-Carrinho de compras persistente
+### 🚀 Instalação
 
-Fluxo completo de pedidos
+#### Pré-requisitos
+- Docker 20.10+
+- Docker Compose 2.0+
+- Git
 
-Histórico de transações
-
-🛠 Tecnologias Utilizadas
-Principais
-Componente	Tecnologia
-Backend	Laravel 10
-Banco de Dados	MySQL 8.0
-Cache	Redis
-Containerização	Docker
-Ferramentas
-Testes de API: Insomnia/Postman
-
-Testes Unitários: PHPUnit
-
-CI/CD: GitHub Actions
-
-🚀 Instalação
-Pré-requisitos
-Docker 20.10+
-
-Docker Compose 2.0+
-
-Git
-
-```
+```bash
 # Clonar repositório
 git clone https://github.com/LorenzoHzK/autoparts-marketplace.git
 cd autoparts-marketplace
@@ -212,33 +218,45 @@ docker exec -it autoparts-app bash
 composer install
 php artisan key:generate
 php artisan migrate --seed
+
 Acesse a API em: http://localhost:8080
 ```
+
 ### 📡 Rotas da API
-**Autenticação**
+
+#### Autenticação
+```http
+POST /api/auth/register   - Registrar usuário
+POST /api/auth/login      - Login de usuário
 ```
-Método	Rota	Descrição
-POST	/api/auth/register	Registrar usuário
-POST	/api/auth/login	Login de usuário
-Produtos
-Método	Rota	Descrição
-GET	/api/products	Listar autopeças
-POST	/api/products	Cadastrar nova peça
-Pedidos
-Método	Rota	Descrição
-POST	/api/cart	Adicionar ao carrinho
-POST	/api/orders	Finalizar pedido
+
+#### Produtos
+```http
+GET  /api/products        - Listar autopeças
+POST /api/products        - Cadastrar nova peça
 ```
+
+#### Pedidos
+```http
+POST /api/cart            - Adicionar ao carrinho
+POST /api/orders          - Finalizar pedido
+```
+
 ### 🧪 Testes
+
 Execute os testes com:
+```bash
 php artisan test
-Cobertura de Testes:
-Autenticação de usuários
-Operações CRUD de produtos
-Fluxo de processamento de pedidos
-Testes de gerenciamento de carrinho
+```
+
+**Cobertura de Testes:**
+- Autenticação de usuários
+- Operações CRUD de produtos
+- Fluxo de processamento de pedidos
+- Testes de gerenciamento de carrinho
 
 ### 📂 Estrutura do Projeto
+
 ```bash
 autoparts-marketplace/
 ├── app/
@@ -256,3 +274,11 @@ autoparts-marketplace/
 ├── tests/                 # Testes
 └── docker/                # Config Docker
 ```
+
+### 👨‍💻 Sobre o Desenvolvedor
+
+**Matheus Lorenzo Siqueira**  
+Full Stack Developer.
+
+[![GitHub](https://img.shields.io/badge/GitHub-@LorenzoHzK-181717?logo=github)](https://github.com/LorenzoHzK)  
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-0A66C2?logo=linkedin)](https://www.linkedin.com/in/matheuslorenzodeveloper)

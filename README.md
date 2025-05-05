@@ -137,5 +137,5 @@ autoparts-marketplace/
 Matheus Lorenzo Siqueira
 Full Stack Developer specializing in Laravel applications.
 
-![image](https://github.com/user-attachments/assets/b1146715-33f1-4afe-8208-164496e3d902)
-![image](https://github.com/user-attachments/assets/35d510a9-a857-4e99-9799-2ed8811c4f6f)
+[![GitHub](https://img.shields.io/badge/GitHub-@LorenzoHzK-181717?logo=github)](https://github.com/LorenzoHzK)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-0A66C2?logo=linkedin)](https://www.linkedin.com/in/matheuslorenzodeveloper)

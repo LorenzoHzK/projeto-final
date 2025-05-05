@@ -115,7 +115,8 @@ Order processing workflow
 Cart management tests
 
 
-📂 Project Architecture
+**📂 Project Architecture**
+```bash
 autoparts-marketplace/
 ├── app/
 │   ├── Http/
@@ -131,7 +132,7 @@ autoparts-marketplace/
 ├── routes/                # API routes
 ├── tests/                 # Feature & unit tests
 └── docker/                # Docker configuration
-
+```
 👨‍💻 About the Developer
 Matheus Lorenzo Siqueira
 Full Stack Developer specializing in Laravel applications.

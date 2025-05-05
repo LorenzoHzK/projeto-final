@@ -83,7 +83,7 @@ php artisan key:generate
 php artisan migrate --seed
 
 Access the API at: http://localhost:8080
-
+```
 📚 API Endpoints
 Authentication
 Method	Endpoint	Description

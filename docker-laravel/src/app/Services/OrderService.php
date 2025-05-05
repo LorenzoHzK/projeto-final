@@ -1,6 +1,7 @@
 <?php
 
 namespace app\Services;
+
 use App\Models\CartItem;
 use App\Models\Cart;
 use App\Models\Order;
@@ -14,10 +15,11 @@ use Illuminate\Http\Request;
 class OrderService
 {
     public function __construct(
-        protected OrderRepository $ordersRepository,
+        protected OrderRepository  $ordersRepository,
         protected OrderItemService $orderItemService,
-        protected Request $request)
-    {}
+        protected Request          $request)
+    {
+    }
 
     public function showOrders()
     {
@@ -46,7 +48,7 @@ class OrderService
             ]);
         }
         $total['totalAmount'] = $cartItems->sum(
-            function($item) {
+            function ($item) {
                 return $item->unit_price * $item->quantity;
             });
 
@@ -67,18 +69,16 @@ class OrderService
         $validatedData['user_id'] = $user;
         $validatedData['status'] = 'pending';
 
-        foreach ($cartItems as $cartItem)
-        {
+        foreach ($cartItems as $cartItem) {
             $product = Product::find($cartItem->product_id);
 
-            if (!$product){
+            if (!$product) {
                 return response()->json([
                     'message' => 'Product not found', 404,
                 ]);
             }
 
-            if($cartItem->quantity > $product->stock)
-            {
+            if ($cartItem->quantity > $product->stock) {
                 return response()->json([
                     'message' => 'Product stock is not enough: ' . $product->name,
                     'product_id' => $product->id,
@@ -106,7 +106,7 @@ class OrderService
             CartItem::where('cart_id', $cart->id)->delete();
         }
 
-        return response ()->json([
+        return response()->json([
             'message' => 'Order created with success',
             'data' => $Order
         ], 201);
